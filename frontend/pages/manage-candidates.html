@@ -112,11 +112,11 @@
 
         async function loadData() {
             try {
-                const elections = await api.get('/elections/list');
+                const elections = await api.get('/elections');
                 const select = document.getElementById('electionId');
                 select.innerHTML += elections.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
 
-                const candidatesPromises = elections.map(e => api.get(`/elections/candidates?id=${e.id}`).catch(() => []));
+                const candidatesPromises = elections.map(e => api.get(`/candidates?election_id=${e.id}`).catch(() => []));
                 const allCandidatesGrouped = await Promise.all(candidatesPromises);
                 
                 const tbody = document.getElementById('candidatesTable');
@@ -136,7 +136,7 @@
                                 </td>
                                 <td class="px-8 py-6 text-right">
                                     <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-slate-500 hover:text-red-400 transition-colors p-2">
-                                        <i data-lucide="user-minus" class="w-5 h-5"></i>
+                                        <i data-lucide="trash-2" class="w-5 h-5"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -157,8 +157,8 @@
             try {
                 btn.disabled = true;
                 btn.innerHTML = 'Broadcasting Authorization...';
-                await api.post('/elections/add-candidate', { 
-                    electionId: document.getElementById('electionId').value,
+                await api.post('/candidates?action=add', { 
+                    election_id: document.getElementById('electionId').value,
                     name: document.getElementById('name').value
                 });
                 document.getElementById('candidateModal').classList.add('hidden');
@@ -173,7 +173,7 @@
         async function deleteCandidate(electionId, candidateId) {
             if (!confirm('Are you sure you want to revoke this authorization?')) return;
             try {
-                await api.post('/elections/delete-candidate', { electionId, candidateId });
+                await api.post('/candidates?action=delete', { election_id: electionId, candidate_id: candidateId });
                 loadData();
             } catch (err) {
                 alert(err.message);

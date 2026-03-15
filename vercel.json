@@ -1,6 +1,11 @@
 {
 "routes": [
-{ "src": "/api/(.*)", "dest": "/api/$1" },
+{ "src": "/api/auth", "dest": "/api/auth.js" },
+{ "src": "/api/elections", "dest": "/api/elections.js" },
+{ "src": "/api/candidates", "dest": "/api/candidates.js" },
+{ "src": "/api/votes", "dest": "/api/votes.js" },
+{ "src": "/api/results", "dest": "/api/results.js" },
+{ "src": "/api/users", "dest": "/api/users.js" },
 { "src": "/(.*)", "dest": "/frontend/$1" }
 ]
 }

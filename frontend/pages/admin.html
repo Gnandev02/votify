@@ -149,8 +149,8 @@
 
         async function loadAdminStats() {
             try {
-                const elections = await api.get('/elections/list');
-                const voters = await api.get('/admin/voters').catch(() => []);
+                const elections = await api.get('/elections');
+                const voters = await api.get('/users').catch(() => []);
                 
                 document.getElementById('totalElections').textContent = elections.length;
                 document.getElementById('totalVoters').textContent = voters?.length || 0;

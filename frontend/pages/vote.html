@@ -82,13 +82,13 @@
 
         async function loadBallot() {
             try {
-                const elections = await api.get('/elections/list');
+                const elections = await api.get('/elections');
                 const election = elections.find(e => e.id == electionId);
                 if (!election) throw new Error('Session invalid');
                 
                 document.getElementById('electionTitle').textContent = election.title;
                 
-                const candidates = await api.get(`/elections/candidates?id=${electionId}`);
+                const candidates = await api.get(`/candidates?election_id=${electionId}`);
                 const list = document.getElementById('candidatesList');
                 
                 list.innerHTML = candidates.map(c => `
@@ -133,7 +133,7 @@
                 btn.disabled = true;
                 btn.innerHTML = 'Broadcasting Ballot...';
                 
-                await api.post('/vote/cast', { electionId, candidateId: selectedCandidateId });
+                await api.post('/votes?action=submit', { election_id: electionId, candidate_id: selectedCandidateId });
                 alert('Ballot cast and cryptographically sealed. Thank you for participating.');
                 window.location.href = 'results.html';
             } catch (err) {

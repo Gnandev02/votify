@@ -97,7 +97,7 @@
                 const otp = Array.from(inputs).map(i => i.value).join('');
                 if (otp.length < 6) throw new Error('Complete the 6-digit sequence.');
                 
-                const response = await fetch("/api/auth/verify-otp", {
+                const response = await fetch("/api/auth?action=verify", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -129,7 +129,7 @@
                 btn.disabled = true;
                 btn.innerText = 'SENDING...';
                 
-                const response = await fetch("/api/auth/register", {
+                const response = await fetch("/api/auth?action=register", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

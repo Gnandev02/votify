@@ -110,7 +110,7 @@
 
         async function loadElections() {
             try {
-                const elections = await api.get('/elections/list');
+                const elections = await api.get('/elections');
                 const list = document.getElementById('electionsList');
                 
                 list.innerHTML = elections.map(e => `

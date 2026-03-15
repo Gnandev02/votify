@@ -71,10 +71,10 @@
 
         async function loadResults() {
             try {
-                const elections = await api.get('/elections/list');
+                const elections = await api.get('/elections');
                 const list = document.getElementById('resultsGrid');
                 
-                const resultsPromises = elections.map(e => api.get(`/elections/results?id=${e.id}`).catch(() => []));
+                const resultsPromises = elections.map(e => api.get(`/results?action=analytics&election_id=${e.id}`).catch(() => []));
                 const allResults = await Promise.all(resultsPromises);
                 
                 list.innerHTML = elections.map((e, idx) => {
