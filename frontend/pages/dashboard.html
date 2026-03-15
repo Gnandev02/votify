@@ -84,7 +84,7 @@
                     <h3 class="text-2xl font-extrabold text-[#0f172a] tracking-tight">Available Sessions</h3>
                     <p class="text-slate-500 text-sm font-medium">Live elections processing in your jurisdiction</p>
                 </div>
-                <button class="text-sm font-bold text-saas-blue hover:text-saas-teal transition-colors flex items-center gap-2">
+                <button onclick="loadElections('electionsList')" class="text-sm font-bold text-saas-blue hover:text-saas-teal transition-colors flex items-center gap-2">
                     Refresh Sessions <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -101,47 +101,13 @@
     </main>
 
     <script src="../js/app.js"></script>
+    <script src="../js/dashboard.js"></script>
     <script>
         lucide.createIcons();
         const user = api.getUser();
         if (!user || user.role !== 'voter') window.location.href = 'login.html';
-        
         document.getElementById('voterName').textContent = user.name;
-
-        async function loadElections() {
-            try {
-                const elections = await api.get('/elections');
-                const list = document.getElementById('electionsList');
-                
-                list.innerHTML = elections.map(e => `
-                    <div class="saas-card p-8 group flex flex-col">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="w-14 h-14 bg-blue-50 text-saas-blue flex items-center justify-center rounded-2xl group-hover:scale-110 transition-transform">
-                                <i data-lucide="vote" class="w-7 h-7"></i>
-                            </div>
-                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-100 italic">Live Session</span>
-                        </div>
-                        <h4 class="text-xl font-bold text-[#0f172a] mb-2">${e.title}</h4>
-                        <p class="text-slate-500 text-sm mb-8 flex-grow leading-relaxed">${e.description || 'Enterprise governance session processing with end-to-end encryption.'}</p>
-                        <div class="pt-6 border-t border-slate-50">
-                            <a href="vote.html?id=${e.id}" class="btn-saas-primary w-full shadow-lg shadow-blue-900/10">
-                                Access Ballot Center <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                            </a>
-                        </div>
-                    </div>
-                `).join('') || `
-                    <div class="col-span-full p-20 text-center saas-card">
-                        <i data-lucide="inbox" class="w-12 h-12 text-slate-200 mx-auto mb-6"></i>
-                        <p class="text-slate-400 font-bold uppercase tracking-widest">No active sessions found in your region.</p>
-                    </div>
-                `;
-                lucide.createIcons();
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        loadElections();
+        loadElections('electionsList');
     </script>
 </body>
 </html>

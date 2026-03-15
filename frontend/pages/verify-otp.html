@@ -60,6 +60,7 @@
     </div>
 
     <script src="../js/app.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
         lucide.createIcons();
         setTimeout(() => {
@@ -83,45 +84,6 @@
                 }
             });
         });
-        
-        document.getElementById('otpForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerHTML;
-            
-            try {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Verifying...</span>';
-                lucide.createIcons();
-                
-                const otp = Array.from(inputs).map(i => i.value).join('');
-                if (otp.length < 6) throw new Error('Complete the 6-digit sequence.');
-                
-                const response = await fetch("/api/auth?action=verify", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email, otp })
-                });
-
-                const text = await response.text();
-                const data = text ? JSON.parse(text) : {};
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Verification failed');
-                }
-                
-                alert('Account verified successfully. You can now log in.');
-                window.location.href = 'login.html';
-            } catch (err) {
-                console.error('OTP Error:', err);
-                alert(err.message || 'Verification failed.');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                lucide.createIcons();
-            }
-        });
 
         document.getElementById('resendBtn').addEventListener('click', async (e) => {
             const btn = e.target;
@@ -131,15 +93,11 @@
                 
                 const response = await fetch("/api/auth?action=register", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, resend: true })
                 });
 
-                const text = await response.text();
-                const data = text ? JSON.parse(text) : {};
-
+                const data = await response.json();
                 if (!response.ok) throw new Error(data.message || 'Resend failed');
                 
                 alert('A new verification code has been sent.');

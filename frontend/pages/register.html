@@ -73,16 +73,17 @@
     </div>
 
     <script src="../js/app.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
         lucide.createIcons();
         setTimeout(() => {
             document.querySelector('.reveal-up').classList.add('visible');
         }, 100);
 
-        let selectedRole = 'voter';
+        window.selectedRole = 'voter';
 
         function setRole(role) {
-            selectedRole = role;
+            window.selectedRole = role;
             document.querySelectorAll('.role-btn').forEach(btn => {
                 btn.classList.remove('border-teal-500', 'bg-teal-500/10', 'text-teal-400', 'shadow-sm');
                 btn.classList.add('border-white/5', 'text-slate-500');
@@ -91,51 +92,6 @@
             activeBtn.classList.add('border-teal-500', 'bg-teal-500/10', 'text-teal-400', 'shadow-sm');
             activeBtn.classList.remove('border-white/5', 'text-slate-500');
         }
-        
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerHTML;
-            
-            try {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing...</span>';
-                lucide.createIcons();
-                
-                const data = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    password: document.getElementById('password').value,
-                    role: selectedRole
-                };
-                
-                const response = await fetch("/api/auth?action=register", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const text = await response.text();
-                const result = text ? JSON.parse(text) : {};
-
-                if (!response.ok) {
-                    throw new Error(result.message || 'Registration failed');
-                }
-                
-                // Most Optimal Decision: Redirect to verify-otp since backend requires it
-                localStorage.setItem('pendingEmail', data.email);
-                alert('Account created! Please verify your email.');
-                window.location.href = 'verify-otp.html';
-            } catch (err) {
-                console.error('Registration Error:', err);
-                alert(err.message || 'Registration failed. Please try again.');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                lucide.createIcons();
-            }
-        });
     </script>
 </body>
 </html>

@@ -62,59 +62,12 @@
     </main>
 
     <script src="../js/app.js"></script>
+    <script src="../js/dashboard.js"></script>
     <script>
         lucide.createIcons();
         const user = api.getUser();
         if (user && user.role === 'admin') {
             document.getElementById('backBtn').href = 'admin.html';
-        }
-
-        async function loadResults() {
-            try {
-                const elections = await api.get('/elections');
-                const list = document.getElementById('resultsGrid');
-                
-                const resultsPromises = elections.map(e => api.get(`/results?action=analytics&election_id=${e.id}`).catch(() => []));
-                const allResults = await Promise.all(resultsPromises);
-                
-                list.innerHTML = elections.map((e, idx) => {
-                    const results = allResults[idx];
-                    const totalVotes = results.reduce((acc, c) => acc + c.vote_count, 0);
-                    
-                    return `
-                        <div class="saas-card bg-[#112947] border border-white/10 rounded-2xl shadow-xl overflow-hidden">
-                            <div class="p-8 border-b border-white/5 flex justify-between items-start">
-                                <div>
-                                    <h4 class="text-xl font-extrabold text-white mb-1">${e.title}</h4>
-                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Election outcome verified</p>
-                                </div>
-                                <div class="px-4 py-1.5 bg-teal-600/10 rounded-full border border-teal-500/20 text-[10px] font-bold uppercase tracking-widest text-teal-400">
-                                    Total: ${totalVotes} Votes
-                                </div>
-                            </div>
-                            <div class="p-8 space-y-6">
-                                ${results.length ? results.map(c => {
-                                    const percent = totalVotes > 0 ? (c.vote_count / totalVotes * 100).toFixed(1) : 0;
-                                    return `
-                                        <div>
-                                            <div class="flex justify-between items-end mb-3">
-                                                <p class="text-sm font-bold text-slate-200">${c.name}</p>
-                                                <p class="text-xs font-black text-teal-400">${c.vote_count} <span class="text-slate-500 font-bold">(${percent}%)</span></p>
-                                            </div>
-                                            <div class="h-3 bg-[#0E2340] rounded-full overflow-hidden border border-white/5">
-                                                <div class="h-full bg-teal-600 shadow-[0_0_12px_rgba(42,157,143,0.4)] transition-all duration-1000" style="width: ${percent}%"></div>
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('') : '<p class="text-center py-6 text-slate-500 text-xs font-bold uppercase tracking-widest">Waiting for session finalization</p>'}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                lucide.createIcons();
-            } catch (err) {
-                console.error(err);
-            }
         }
 
         loadResults();

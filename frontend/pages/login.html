@@ -66,51 +66,13 @@
     </div>
 
     <script src="../js/app.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
         lucide.createIcons();
         // Fixed class name from reveal-up-active to visible
         setTimeout(() => {
             document.querySelector('.reveal-up').classList.add('visible');
         }, 100);
-        
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerHTML;
-            
-            try {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Authenticating...</span>';
-                lucide.createIcons();
-                
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                
-                const response = await fetch("/api/auth?action=login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const text = await response.text();
-                const data = text ? JSON.parse(text) : {};
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Login failed');
-                }
-                
-                api.saveAuth(data.user, data.token);
-                window.location.href = data.user.role === 'admin' ? 'admin.html' : 'dashboard.html';
-            } catch (err) {
-                console.error('Login Error:', err);
-                alert(err.message || 'Login failed. Please check your credentials.');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                lucide.createIcons();
-            }
-        });
     </script>
 </body>
 </html>

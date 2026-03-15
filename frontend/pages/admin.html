@@ -140,47 +140,14 @@
     </main>
 
     <script src="../js/app.js"></script>
+    <script src="../js/dashboard.js"></script>
     <script>
         lucide.createIcons();
         const user = api.getUser();
         if (!user || user.role !== 'admin') window.location.href = 'login.html';
         
         document.getElementById('adminName').textContent = user.name;
-
-        async function loadAdminStats() {
-            try {
-                const elections = await api.get('/elections');
-                const voters = await api.get('/users').catch(() => []);
-                
-                document.getElementById('totalElections').textContent = elections.length;
-                document.getElementById('totalVoters').textContent = voters?.length || 0;
-                
-                const log = document.getElementById('activityLog');
-                log.innerHTML = elections.slice(0, 3).map(e => `
-                    <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm text-saas-blue">
-                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-900">${e.title}</p>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Election Created</p>
-                            </div>
-                        </div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${new Date(e.created_at || Date.now()).toLocaleDateString()}</p>
-                    </div>
-                `).join('') || '<p class="text-slate-400 text-xs text-center py-4 uppercase font-bold tracking-widest">No activity found</p>';
-                lucide.createIcons();
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        function logout() {
-            api.logout();
-        }
-
-        loadAdminStats();
+        loadAdminDashboard();
     </script>
 </body>
 </html>
