@@ -18,56 +18,56 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#f8fafc] text-slate-900 min-h-screen flex items-center justify-center p-6 font-inter">
+<body class="bg-[#0B1F3A] text-slate-100 min-h-screen flex items-center justify-center p-6 font-inter">
 
     <div class="max-w-md w-full reveal-up">
         <div class="text-center mb-10">
             <div class="inline-flex items-center gap-3 mb-6">
-                <div class="w-12 h-12 bg-saas-blue flex items-center justify-center rounded-xl shadow-lg">
+                <div class="w-12 h-12 bg-teal-600 flex items-center justify-center rounded-xl shadow-lg">
                     <i data-lucide="vote" class="text-white w-7 h-7"></i>
                 </div>
-                <span class="text-3xl font-extrabold tracking-tight text-saas-blue">Votify</span>
+                <span class="text-3xl font-extrabold tracking-tight text-white">Votify</span>
             </div>
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">Create Your Account</h2>
-            <p class="text-sm text-slate-500 font-medium tracking-wide uppercase">Join the secure voting platform</p>
+            <h2 class="text-2xl font-bold text-white mb-2">Create Your Account</h2>
+            <p class="text-sm text-slate-400 font-medium tracking-wide uppercase">Join the secure voting platform</p>
         </div>
 
-        <form id="registerForm" class="saas-card p-10 space-y-7 bg-white">
+        <form id="registerForm" class="saas-card p-10 space-y-7 bg-[#112947] border border-white/10 rounded-2xl shadow-2xl">
             <div class="space-y-5">
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Full Name</label>
                     <div class="relative group">
-                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-saas-blue transition-colors"></i>
-                        <input type="text" id="name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="Authorized User">
+                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-teal-400 transition-colors"></i>
+                        <input type="text" id="name" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-medium text-white" placeholder="Authorized User">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Email Address</label>
                     <div class="relative group">
-                        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-saas-blue transition-colors"></i>
-                        <input type="email" id="email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="name@company.com">
+                        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-teal-400 transition-colors"></i>
+                        <input type="email" id="email" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-medium text-white" placeholder="name@company.com">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Password</label>
                     <div class="relative group">
-                        <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-saas-blue transition-colors"></i>
-                        <input type="password" id="password" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="••••••••">
+                        <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-teal-400 transition-colors"></i>
+                        <input type="password" id="password" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-medium text-white" placeholder="••••••••">
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4 pt-2">
-                    <button type="button" onclick="setRole('voter')" id="roleVoter" class="role-btn text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl border-2 border-saas-blue bg-blue-50 text-saas-blue transition-all shadow-sm">Voter</button>
-                    <button type="button" onclick="setRole('admin')" id="roleAdmin" class="role-btn text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl border-2 border-slate-100 text-slate-400 hover:border-slate-200 transition-all">Admin</button>
+                    <button type="button" onclick="setRole('voter')" id="roleVoter" class="role-btn text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl border-2 border-teal-500 bg-teal-500/10 text-teal-400 transition-all shadow-sm">Voter</button>
+                    <button type="button" onclick="setRole('admin')" id="roleAdmin" class="role-btn text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl border-2 border-white/5 text-slate-500 hover:border-white/10 transition-all">Admin</button>
                 </div>
             </div>
 
-            <button type="submit" class="btn-saas-primary w-full py-4 text-base shadow-lg mt-4">
-                Create Account <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            <button type="submit" class="btn-primary w-full py-4 text-base font-bold shadow-lg mt-4 bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition-all">
+                Create Account <i data-lucide="chevron-right" class="w-5 h-5 inline-block ml-1"></i>
             </button>
 
-            <p class="text-sm font-bold text-center text-slate-500 pt-6 border-t border-slate-50">
-                Already have an account? <a href="login.html" class="text-saas-blue hover:underline">Log in</a>
+            <p class="text-sm font-bold text-center text-slate-400 pt-6 border-t border-white/5">
+                Already have an account? <a href="login.html" class="text-teal-400 hover:underline">Log in</a>
             </p>
         </form>
     </div>
@@ -75,19 +75,21 @@
     <script src="../js/app.js"></script>
     <script>
         lucide.createIcons();
-        document.querySelector('.reveal-up').classList.add('reveal-up-active');
+        setTimeout(() => {
+            document.querySelector('.reveal-up').classList.add('visible');
+        }, 100);
 
         let selectedRole = 'voter';
 
         function setRole(role) {
             selectedRole = role;
             document.querySelectorAll('.role-btn').forEach(btn => {
-                btn.classList.remove('border-saas-blue', 'bg-blue-50', 'text-saas-blue', 'shadow-sm');
-                btn.classList.add('border-slate-100', 'text-slate-400');
+                btn.classList.remove('border-teal-500', 'bg-teal-500/10', 'text-teal-400', 'shadow-sm');
+                btn.classList.add('border-white/5', 'text-slate-500');
             });
             const activeBtn = document.getElementById(role === 'admin' ? 'roleAdmin' : 'roleVoter');
-            activeBtn.classList.add('border-saas-blue', 'bg-blue-50', 'text-saas-blue', 'shadow-sm');
-            activeBtn.classList.remove('border-slate-100', 'text-slate-400');
+            activeBtn.classList.add('border-teal-500', 'bg-teal-500/10', 'text-teal-400', 'shadow-sm');
+            activeBtn.classList.remove('border-white/5', 'text-slate-500');
         }
         
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -97,20 +99,41 @@
             
             try {
                 btn.disabled = true;
-                btn.innerHTML = 'Creating Account...';
+                btn.innerHTML = '<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing...</span>';
+                lucide.createIcons();
                 
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
+                const data = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    role: selectedRole
+                };
                 
-                await api.post('/auth/register', { name, email, password, role: selectedRole });
+                const response = await fetch("/api/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const text = await response.text();
+                const result = text ? JSON.parse(text) : {};
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'Registration failed');
+                }
                 
-                localStorage.setItem('pendingEmail', email);
+                // Most Optimal Decision: Redirect to verify-otp since backend requires it
+                localStorage.setItem('pendingEmail', data.email);
+                alert('Account created! Please verify your email.');
                 window.location.href = 'verify-otp.html';
             } catch (err) {
-                alert(err.message);
+                console.error('Registration Error:', err);
+                alert(err.message || 'Registration failed. Please try again.');
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                lucide.createIcons();
             }
         });
     </script>

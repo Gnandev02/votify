@@ -18,14 +18,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#f8fafc] text-slate-900 font-inter min-h-screen">
+<body class="bg-[#0B1F3A] text-slate-100 font-inter min-h-screen">
 
-    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-saas-slate text-white z-50 shadow-2xl">
+    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-[#112947] border-r border-white/10 text-white z-50 shadow-2xl">
         <div class="p-8 pb-12 flex items-center gap-3">
-            <div class="w-10 h-10 bg-saas-teal flex items-center justify-center rounded-xl">
+            <div class="w-10 h-10 bg-teal-600 flex items-center justify-center rounded-xl shadow-lg">
                 <i data-lucide="vote" class="text-white w-6 h-6"></i>
             </div>
-            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-saas-teal">.</span></span>
+            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-teal-400">.</span></span>
         </div>
 
         <nav class="px-4 space-y-2">
@@ -36,7 +36,7 @@
             <a href="manage-elections.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
                 <i data-lucide="calendar" class="w-5 h-5"></i> Elections
             </a>
-            <a href="manage-candidates.html" class="flex items-center gap-4 px-4 py-3.5 bg-saas-blue text-white rounded-xl font-semibold shadow-lg shadow-blue-900/20">
+            <a href="manage-candidates.html" class="flex items-center gap-4 px-4 py-3.5 bg-teal-600 text-white rounded-xl font-semibold shadow-lg shadow-teal-900/20">
                 <i data-lucide="users" class="w-5 h-5"></i> Candidates
             </a>
             <div class="pt-8 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Intelligence</div>
@@ -49,18 +49,18 @@
     <main class="ml-72 p-12">
         <header class="flex justify-between items-center mb-12">
             <div>
-                <h1 class="text-3xl font-extrabold text-[#0f172a] tracking-tight">Candidate Registry</h1>
-                <p class="text-slate-500 font-medium">Verify and authorize election participants</p>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight">Candidate Registry</h1>
+                <p class="text-slate-400 font-medium">Verify and authorize election participants</p>
             </div>
-            <button onclick="document.getElementById('candidateModal').classList.remove('hidden')" class="btn-saas-primary">
+            <button onclick="document.getElementById('candidateModal').classList.remove('hidden')" class="btn-primary bg-teal-600 hover:bg-teal-500 text-white px-6 py-2.5 rounded-xl transition-all flex items-center gap-2">
                 Register Candidate <i data-lucide="user-plus" class="w-5 h-5"></i>
             </button>
         </header>
 
-        <div class="saas-card overflow-hidden">
+        <div class="saas-card bg-[#112947] border border-white/10 rounded-2xl shadow-xl overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200">
+                    <tr class="bg-white/5 border-b border-white/10">
                         <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Participant Name</th>
                         <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Associated session</th>
                         <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none flex justify-end">Actions</th>
@@ -68,7 +68,7 @@
                 </thead>
                 <tbody id="candidatesTable">
                     <tr>
-                        <td colspan="3" class="px-8 py-12 text-center text-slate-400 font-bold uppercase tracking-widest italic">Syncing candidate packets...</td>
+                        <td colspan="3" class="px-8 py-12 text-center text-slate-500 font-bold uppercase tracking-widest italic">Syncing candidate packets...</td>
                     </tr>
                 </tbody>
             </table>
@@ -76,28 +76,28 @@
     </main>
 
     <!-- Candidate Modal -->
-    <div id="candidateModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-        <div class="saas-card w-full max-w-xl p-0 overflow-hidden reveal-up reveal-up-active">
-            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-white">
-                <h3 class="text-xl font-bold text-[#0f172a]">Register Candidate</h3>
-                <button onclick="document.getElementById('candidateModal').classList.add('hidden')" class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+    <div id="candidateModal" class="fixed inset-0 bg-[#0B1F3A]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="saas-card w-full max-w-xl p-0 overflow-hidden reveal-up bg-[#112947] border border-white/10 rounded-2xl shadow-2xl">
+            <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white">Register Candidate</h3>
+                <button onclick="document.getElementById('candidateModal').classList.add('hidden')" class="p-2 text-slate-500 hover:text-white transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <form id="candidateForm" class="p-10 space-y-8 bg-white">
+            <form id="candidateForm" class="p-10 space-y-8">
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Target Election Session</label>
-                        <select id="electionId" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-5 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium appearance-none">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Target Election Session</label>
+                        <select id="electionId" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 px-5 text-sm text-white focus:outline-none focus:border-teal-500 transition-all font-medium appearance-none">
                             <option value="">Select Session...</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Full Legal Name</label>
-                        <input type="text" id="name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-5 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="Authorized Candidate Name">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Full Legal Name</label>
+                        <input type="text" id="name" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 px-5 text-sm text-white focus:outline-none focus:border-teal-500 transition-all font-medium" placeholder="Authorized Candidate Name">
                     </div>
                 </div>
-                <button type="submit" class="btn-saas-primary w-full py-4 text-base shadow-xl">
+                <button type="submit" class="btn-primary w-full py-4 text-base shadow-xl bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition-all font-bold">
                     Authorize Participant
                 </button>
             </form>
@@ -126,16 +126,16 @@
                     const candidates = allCandidatesGrouped[idx];
                     candidates.forEach(c => {
                         html += `
-                            <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
                                 <td class="px-8 py-6">
-                                    <p class="font-bold text-[#0f172a]">${c.name}</p>
-                                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-[0.05em]">Authorized ID: C-${c.id}</p>
+                                    <p class="font-bold text-white">${c.name}</p>
+                                    <p class="text-[10px] text-slate-500 font-medium uppercase tracking-[0.05em]">Authorized ID: C-${c.id}</p>
                                 </td>
                                 <td class="px-8 py-6">
-                                    <span class="px-3 py-1 bg-blue-50 text-saas-blue text-[10px] font-bold uppercase tracking-widest rounded-full border border-blue-100">${e.title}</span>
+                                    <span class="px-3 py-1 bg-teal-600/10 text-teal-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-teal-500/20">${e.title}</span>
                                 </td>
                                 <td class="px-8 py-6 text-right">
-                                    <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-slate-300 hover:text-red-500 transition-colors p-2">
+                                    <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-slate-500 hover:text-red-400 transition-colors p-2">
                                         <i data-lucide="user-minus" class="w-5 h-5"></i>
                                     </button>
                                 </td>

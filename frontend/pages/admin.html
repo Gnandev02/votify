@@ -18,20 +18,20 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#f8fafc] text-slate-900 font-inter min-h-screen">
+<body class="bg-[#0B1F3A] text-slate-100 font-inter min-h-screen">
 
     <!-- Sidebar Navigation -->
-    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-saas-slate text-white z-50 shadow-2xl">
+    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-[#112947] border-r border-white/10 text-white z-50 shadow-2xl">
         <div class="p-8 pb-12 flex items-center gap-3">
-            <div class="w-10 h-10 bg-saas-teal flex items-center justify-center rounded-xl">
+            <div class="w-10 h-10 bg-teal-600 flex items-center justify-center rounded-xl shadow-lg">
                 <i data-lucide="vote" class="text-white w-6 h-6"></i>
             </div>
-            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-saas-teal">.</span></span>
+            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-teal-400">.</span></span>
         </div>
 
         <nav class="px-4 space-y-2">
             <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Administration</p>
-            <a href="admin.html" class="flex items-center gap-4 px-4 py-3.5 bg-saas-blue text-white rounded-xl font-semibold shadow-lg shadow-blue-900/20">
+            <a href="admin.html" class="flex items-center gap-4 px-4 py-3.5 bg-teal-600 text-white rounded-xl font-semibold shadow-lg shadow-teal-900/20">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
             </a>
             <a href="manage-elections.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
@@ -47,7 +47,7 @@
         </nav>
 
         <div class="absolute bottom-8 left-4 right-4">
-            <button onclick="logout()" class="flex items-center gap-4 w-full px-4 py-3.5 text-slate-400 hover:text-red-400 transition-colors">
+            <button onclick="api.logout()" class="flex items-center gap-4 w-full px-4 py-3.5 text-slate-400 hover:text-red-400 transition-colors">
                 <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
             </button>
         </div>
@@ -57,16 +57,16 @@
     <main class="ml-72 p-12">
         <header class="flex justify-between items-center mb-12">
             <div>
-                <h1 class="text-3xl font-extrabold text-[#0f172a] tracking-tight">System Overview</h1>
-                <p class="text-slate-500 font-medium">Real-time governance activity</p>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight">System Overview</h1>
+                <p class="text-slate-400 font-medium">Real-time governance activity</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="text-right">
-                    <p id="adminName" class="text-sm font-bold text-[#0f172a]">Administrator</p>
-                    <p class="text-[10px] font-bold text-saas-teal uppercase tracking-widest">Platform Admin</p>
+                    <p id="adminName" class="text-sm font-bold text-white">Administrator</p>
+                    <p class="text-[10px] font-bold text-teal-400 uppercase tracking-widest">Platform Admin</p>
                 </div>
-                <div class="w-12 h-12 bg-white rounded-full border border-slate-200 flex items-center justify-center shadow-sm">
-                    <i data-lucide="user" class="text-slate-400 w-6 h-6"></i>
+                <div class="w-12 h-12 bg-[#112947] rounded-full border border-white/10 flex items-center justify-center shadow-sm">
+                    <i data-lucide="user" class="text-slate-500 w-6 h-6"></i>
                 </div>
             </div>
         </header>

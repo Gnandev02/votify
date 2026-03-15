@@ -62,7 +62,7 @@ const api = {
     logout() {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
-        window.location.href = '/frontend/index.html';
+        window.location.href = '/';
     },
 
     getUser() {
@@ -75,15 +75,16 @@ const api = {
     }
 };
 
-// Global fade-up animation observer
+// Global reveal-up animation observer
 document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('fade-up-active');
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.reveal-up').forEach((el) => observer.observe(el));
 });

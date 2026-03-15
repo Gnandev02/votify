@@ -12,11 +12,11 @@ export default async function handler(req, res) {
         let query = 'SELECT * FROM candidates';
         let params = [];
         if (election_id) {
-            query += ' WHERE election_id = ?';
+            query += ' WHERE election_id = $1';
             params.push(election_id);
         }
-        const [rows] = await pool.query(query, params);
-        return res.status(200).json(rows);
+        const result = await pool.query(query, params);
+        return res.status(200).json(result.rows);
     } catch (err) {
         console.error('List Candidates Error:', err);
         return res.status(500).json({ message: 'Server error' });

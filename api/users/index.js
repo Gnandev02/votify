@@ -7,16 +7,18 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
         try {
-            const [rows] = await pool.query('SELECT id, name, email, role, verified, created_at FROM users');
-            return res.status(200).json(rows);
+            const result = await pool.query(
+                'SELECT id, name, email, role, verified, created_at FROM users'
+            );
+            return res.status(200).json(result.rows);
         } catch (err) {
             return res.status(500).json({ message: 'Server error' });
         }
     } else if (req.method === 'PUT') {
         try {
-            const { id, verified, role } = req.body;
+            const { id, verified } = req.body;
             if (verified !== undefined) {
-                await pool.query('UPDATE users SET verified = ? WHERE id = ?', [verified, id]);
+                await pool.query('UPDATE users SET verified = $1 WHERE id = $2', [verified, id]);
             }
             return res.status(200).json({ message: 'User updated' });
         } catch (err) {

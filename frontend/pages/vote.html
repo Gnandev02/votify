@@ -18,27 +18,27 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        .candidate-card.selected { border-color: #1e3a8a; background-color: #f0f7ff; box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1); }
-        .candidate-card.selected .check-mark { background-color: #1e3a8a; color: white; transform: scale(1.1); }
+        .candidate-card.selected { border-color: #2A9D8F; background-color: rgba(42,157,143,0.1); box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1); }
+        .candidate-card.selected .check-mark { background-color: #2A9D8F; color: white; transform: scale(1.1); }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-900 font-inter min-h-screen pb-32">
+<body class="bg-[#0B1F3A] text-slate-100 font-inter min-h-screen pb-32">
 
-    <nav class="bg-white border-b border-slate-200 py-6 sticky top-0 z-40">
+    <nav class="bg-[#112947] border-b border-white/10 py-6 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <a href="dashboard.html" class="p-2 text-slate-400 hover:text-saas-blue transition-colors">
+                <a href="dashboard.html" class="p-2 text-slate-400 hover:text-teal-400 transition-colors">
                     <i data-lucide="arrow-left" class="w-6 h-6"></i>
                 </a>
                 <div>
-                    <h1 id="electionTitle" class="text-xl font-extrabold text-[#0f172a] tracking-tight">Accessing Ballot...</h1>
-                    <p class="text-[10px] font-bold text-saas-teal uppercase tracking-[0.2em] italic">Identity verified • Session secure</p>
+                    <h1 id="electionTitle" class="text-xl font-extrabold text-white tracking-tight">Accessing Ballot...</h1>
+                    <p class="text-[10px] font-bold text-teal-400 uppercase tracking-[0.2em] italic">Identity verified • Session secure</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest hidden sm:flex">
+            <div class="flex items-center gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest hidden sm:flex">
                 <span>Phase 1/2</span>
-                <div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
-                    <div class="w-1/2 h-full bg-saas-blue"></div>
+                <div class="w-24 h-2 bg-[#0E2340] rounded-full overflow-hidden">
+                    <div class="w-1/2 h-full bg-teal-600"></div>
                 </div>
             </div>
         </div>
@@ -46,25 +46,25 @@
 
     <main class="max-w-3xl mx-auto px-6 mt-16">
         <div class="text-center mb-12">
-            <div class="w-16 h-16 bg-blue-50 text-saas-blue flex items-center justify-center rounded-3xl mx-auto mb-6 shadow-sm border border-blue-100">
+            <div class="w-16 h-16 bg-teal-600/20 text-teal-400 flex items-center justify-center rounded-3xl mx-auto mb-6 shadow-sm border border-teal-500/20">
                 <i data-lucide="shield-check" class="w-8 h-8"></i>
             </div>
-            <h2 class="text-3xl font-extrabold text-[#0f172a] mb-4">Official Ballot Selection</h2>
-            <p class="text-slate-500 font-medium">Please select one candidate from the list below. Your choice is encrypted and anonymous.</p>
+            <h2 class="text-3xl font-extrabold text-white mb-4">Official Ballot Selection</h2>
+            <p class="text-slate-400 font-medium">Please select one candidate from the list below. Your choice is encrypted and anonymous.</p>
         </div>
 
         <div id="candidatesList" class="space-y-4">
             <!-- Loading state -->
-            <div class="p-12 text-center saas-card">
-                <p class="text-slate-400 font-bold uppercase tracking-widest italic">Opening ballot vault...</p>
+            <div class="p-12 text-center saas-card bg-[#112947] border border-white/10 rounded-2xl">
+                <p class="text-slate-500 font-bold uppercase tracking-widest italic">Opening ballot vault...</p>
             </div>
         </div>
 
         <div class="mt-16 text-center reveal-up">
-            <button id="submitVote" disabled class="btn-saas-primary px-16 py-5 text-lg shadow-2xl opacity-50 cursor-not-allowed">
+            <button id="submitVote" disabled class="btn-primary px-16 py-5 text-lg shadow-2xl opacity-50 cursor-not-allowed bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition-all">
                 Cast Encrypted Ballot <i data-lucide="lock" class="w-5 h-5 ml-2"></i>
             </button>
-            <p class="mt-8 text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Signature required for transmission</p>
+            <p class="mt-8 text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em]">Signature required for transmission</p>
         </div>
     </main>
 
@@ -108,7 +108,9 @@
                     </div>
                 `).join('') || '<p class="text-center py-10 text-slate-400 font-bold uppercase tracking-widest">No candidates found</p>';
                 lucide.createIcons();
-                document.querySelector('.reveal-up').classList.add('reveal-up-active');
+                setTimeout(() => {
+                    document.querySelector('.reveal-up').classList.add('visible');
+                }, 100);
             } catch (err) {
                 alert(err.message);
                 window.location.href = 'dashboard.html';

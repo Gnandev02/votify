@@ -12,19 +12,19 @@ export default async function handler(req, res) {
         if (!election_id) return res.status(400).json({ message: 'Missing election_id' });
 
         const query = `
-      SELECT c.id, c.name, c.party, c.photo, COUNT(v.id) as vote_count 
-      FROM candidates c 
-      LEFT JOIN votes v ON c.id = v.candidate_id 
-      WHERE c.election_id = ? 
-      GROUP BY c.id
-    `;
-        const [rows] = await pool.query(query, [election_id]);
+            SELECT c.id, c.name, c.party, c.photo, COUNT(v.id)::int AS vote_count
+            FROM candidates c
+            LEFT JOIN votes v ON c.id = v.candidate_id
+            WHERE c.election_id = $1
+            GROUP BY c.id
+        `;
+        const result = await pool.query(query, [election_id]);
 
-        const [electionDetails] = await pool.query('SELECT * FROM elections WHERE id = ?', [election_id]);
+        const electionResult = await pool.query('SELECT * FROM elections WHERE id = $1', [election_id]);
 
         return res.status(200).json({
-            election: electionDetails[0],
-            results: rows
+            election: electionResult.rows[0],
+            results: result.rows
         });
     } catch (err) {
         console.error('Analytics Error:', err);

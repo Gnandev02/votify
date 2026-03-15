@@ -11,7 +11,7 @@ export default async function handler(req, res) {
         const { id, status } = req.body;
         if (!id || !status) return res.status(400).json({ message: 'Missing fields' });
 
-        await pool.query('UPDATE elections SET status = ? WHERE id = ?', [status, id]);
+        await pool.query('UPDATE elections SET status = $1 WHERE id = $2', [status, id]);
         return res.status(200).json({ message: 'Election status updated' });
     } catch (err) {
         console.error('Toggle Election Error:', err);

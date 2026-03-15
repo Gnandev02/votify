@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         }
 
         await pool.query(
-            'INSERT INTO elections (title, description, start_date, end_date, status) VALUES (?, ?, ?, ?, ?)',
+            'INSERT INTO elections (title, description, start_date, end_date, status) VALUES ($1, $2, $3, $4, $5)',
             [title, description || '', start_date, end_date, 'upcoming']
         );
 

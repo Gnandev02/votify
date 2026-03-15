@@ -1,24 +1,26 @@
+-- Votify PostgreSQL Schema (Neon-compatible)
+
 CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  role ENUM('admin', 'voter') DEFAULT 'voter',
+  role VARCHAR(20) DEFAULT 'voter',
   verified BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS elections (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   description TEXT,
-  start_date DATETIME NOT NULL,
-  end_date DATETIME NOT NULL,
-  status ENUM('upcoming', 'active', 'completed') DEFAULT 'upcoming'
+  start_date TIMESTAMP NOT NULL,
+  end_date TIMESTAMP NOT NULL,
+  status VARCHAR(20) DEFAULT 'upcoming'
 );
 
 CREATE TABLE IF NOT EXISTS candidates (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   election_id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
   party VARCHAR(255),
@@ -27,7 +29,7 @@ CREATE TABLE IF NOT EXISTS candidates (
 );
 
 CREATE TABLE IF NOT EXISTS votes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
   election_id INT NOT NULL,
   candidate_id INT NOT NULL,
@@ -41,5 +43,5 @@ CREATE TABLE IF NOT EXISTS votes (
 CREATE TABLE IF NOT EXISTS otps (
   email VARCHAR(255) PRIMARY KEY,
   otp VARCHAR(10) NOT NULL,
-  expires_at DATETIME NOT NULL
+  expires_at TIMESTAMP NOT NULL
 );

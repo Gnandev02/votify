@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         if (!election_id || !name) return res.status(400).json({ message: 'Missing fields' });
 
         await pool.query(
-            'INSERT INTO candidates (election_id, name, party, photo) VALUES (?, ?, ?, ?)',
+            'INSERT INTO candidates (election_id, name, party, photo) VALUES ($1, $2, $3, $4)',
             [election_id, name, party || null, photo || null]
         );
 

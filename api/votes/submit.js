@@ -11,24 +11,28 @@ export default async function handler(req, res) {
         const { election_id, candidate_id } = req.body;
         if (!election_id || !candidate_id) return res.status(400).json({ message: 'Missing fields' });
 
-        const [elections] = await pool.query('SELECT * FROM elections WHERE id = ?', [election_id]);
-        if (elections.length === 0 || elections[0].status !== 'active') {
+        const elections = await pool.query('SELECT * FROM elections WHERE id = $1', [election_id]);
+        if (elections.rows.length === 0 || elections.rows[0].status !== 'active') {
             return res.status(400).json({ message: 'Election is not active' });
         }
 
-        const [votes] = await pool.query('SELECT * FROM votes WHERE user_id = ? AND election_id = ?', [user.id, election_id]);
-        if (votes.length > 0) {
+        const existingVotes = await pool.query(
+            'SELECT * FROM votes WHERE user_id = $1 AND election_id = $2',
+            [user.id, election_id]
+        );
+        if (existingVotes.rows.length > 0) {
             return res.status(403).json({ message: 'You have already voted in this election' });
         }
 
         await pool.query(
-            'INSERT INTO votes (user_id, election_id, candidate_id) VALUES (?, ?, ?)',
+            'INSERT INTO votes (user_id, election_id, candidate_id) VALUES ($1, $2, $3)',
             [user.id, election_id, candidate_id]
         );
 
         return res.status(201).json({ message: 'Vote successfully submitted' });
     } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
+        // PostgreSQL unique violation error code is '23505'
+        if (err.code === '23505') {
             return res.status(403).json({ message: 'You have already voted in this election' });
         }
         console.error('Submit Vote Error:', err);
