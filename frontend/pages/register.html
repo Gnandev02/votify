@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Registration | Votify Secure Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'saas-blue': '#1e3a8a', 'saas-teal': '#14b8a6' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#f8fafc] text-slate-900 min-h-screen flex items-center justify-center p-6 font-inter">
+
+    <div class="max-w-md w-full reveal-up">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 bg-saas-blue flex items-center justify-center rounded-xl shadow-lg">
+                    <i data-lucide="vote" class="text-white w-7 h-7"></i>
+                </div>
+                <span class="text-3xl font-extrabold tracking-tight text-saas-blue">Votify</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Create Your Account</h2>
+            <p class="text-sm text-slate-500 font-medium tracking-wide uppercase">Join the secure voting platform</p>
+        </div>
+
+        <form id="registerForm" class="saas-card p-10 space-y-7 bg-white">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Full Name</label>
+                    <div class="relative group">
+                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-saas-blue transition-colors"></i>
+                        <input type="text" id="name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="Authorized User">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Email Address</label>
+                    <div class="relative group">
+                        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-saas-blue transition-colors"></i>
+                        <input type="email" id="email" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="name@company.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Password</label>
+                    <div class="relative group">
+                        <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-saas-blue transition-colors"></i>
+                        <input type="password" id="password" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-saas-blue focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" placeholder="••••••••">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <button type="button" onclick="setRole('voter')" id="roleVoter" class="role-btn text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl border-2 border-saas-blue bg-blue-50 text-saas-blue transition-all shadow-sm">Voter</button>
+                    <button type="button" onclick="setRole('admin')" id="roleAdmin" class="role-btn text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl border-2 border-slate-100 text-slate-400 hover:border-slate-200 transition-all">Admin</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-saas-primary w-full py-4 text-base shadow-lg mt-4">
+                Create Account <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+
+            <p class="text-sm font-bold text-center text-slate-500 pt-6 border-t border-slate-50">
+                Already have an account? <a href="login.html" class="text-saas-blue hover:underline">Log in</a>
+            </p>
+        </form>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        lucide.createIcons();
+        document.querySelector('.reveal-up').classList.add('reveal-up-active');
+
+        let selectedRole = 'voter';
+
+        function setRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('border-saas-blue', 'bg-blue-50', 'text-saas-blue', 'shadow-sm');
+                btn.classList.add('border-slate-100', 'text-slate-400');
+            });
+            const activeBtn = document.getElementById(role === 'admin' ? 'roleAdmin' : 'roleVoter');
+            activeBtn.classList.add('border-saas-blue', 'bg-blue-50', 'text-saas-blue', 'shadow-sm');
+            activeBtn.classList.remove('border-slate-100', 'text-slate-400');
+        }
+        
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = 'Creating Account...';
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                await api.post('/auth/register', { name, email, password, role: selectedRole });
+                
+                localStorage.setItem('pendingEmail', email);
+                window.location.href = 'verify-otp.html';
+            } catch (err) {
+                alert(err.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

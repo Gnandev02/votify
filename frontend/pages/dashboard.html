@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Dashboard | Votify Voter Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'saas-blue': '#1e3a8a', 'saas-teal': '#14b8a6' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#f8fafc] text-slate-900 font-inter min-h-screen">
+
+    <!-- Top Banner -->
+    <header class="bg-white border-b border-slate-200 py-6 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-saas-gradient flex items-center justify-center rounded-xl shadow-lg">
+                    <i data-lucide="vote" class="text-white w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-extrabold text-[#0f172a] tracking-tight">Votify</span>
+                    <span class="block text-[10px] font-bold text-saas-teal uppercase tracking-widest leading-none mt-1">Voter Console</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden sm:block">
+                    <p id="voterName" class="text-sm font-bold text-[#0f172a]">Verified Citizen</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Participation Score: 100%</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="api.logout()" class="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                    <div class="w-12 h-12 bg-slate-50 rounded-full border border-slate-200 flex items-center justify-center overflow-hidden">
+                        <i data-lucide="user" class="text-slate-300 w-7 h-7"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Welcome Section -->
+        <div class="grid lg:grid-cols-3 gap-8 mb-16">
+            <div class="lg:col-span-2 saas-card bg-saas-blue p-10 text-white relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                    <i data-lucide="award" class="w-32 h-32"></i>
+                </div>
+                <div class="relative z-10 max-w-lg">
+                    <h2 class="text-3xl font-extrabold mb-4">Welcome back, Citizen.</h2>
+                    <p class="text-blue-100 text-lg mb-8 leading-relaxed">Your voice matters in every election. Access your active sessions and exercise your right to vote securely.</p>
+                    <div class="flex gap-4">
+                        <div class="px-4 py-2 bg-white/10 rounded-lg border border-white/10 text-xs font-bold uppercase tracking-widest">Security Level: High</div>
+                        <div class="px-4 py-2 bg-white/10 rounded-lg border border-white/10 text-xs font-bold uppercase tracking-widest">ID Verified</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="saas-card p-10 flex flex-col justify-center items-center text-center">
+                <div class="w-20 h-20 bg-teal-50 text-saas-teal flex items-center justify-center rounded-full mb-6">
+                    <i data-lucide="activity" class="w-10 h-10"></i>
+                </div>
+                <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Participation Health</h4>
+                <div class="text-4xl font-extrabold text-saas-blue mb-4">Perfect</div>
+                <p class="text-xs text-slate-500 font-medium">You have participated in all 5 recent sessions.</p>
+            </div>
+        </div>
+
+        <!-- Active Elections -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h3 class="text-2xl font-extrabold text-[#0f172a] tracking-tight">Available Sessions</h3>
+                    <p class="text-slate-500 text-sm font-medium">Live elections processing in your jurisdiction</p>
+                </div>
+                <button class="text-sm font-bold text-saas-blue hover:text-saas-teal transition-colors flex items-center gap-2">
+                    Refresh Sessions <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div id="electionsList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Skeleton loader -->
+                <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 animate-pulse">
+                    <div class="w-12 h-12 bg-slate-200 rounded-xl mb-6"></div>
+                    <div class="h-6 bg-slate-200 rounded-full w-3/4 mb-4"></div>
+                    <div class="h-4 bg-slate-200 rounded-full w-1/2"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/app.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = api.getUser();
+        if (!user || user.role !== 'voter') window.location.href = 'login.html';
+        
+        document.getElementById('voterName').textContent = user.name;
+
+        async function loadElections() {
+            try {
+                const elections = await api.get('/elections/list');
+                const list = document.getElementById('electionsList');
+                
+                list.innerHTML = elections.map(e => `
+                    <div class="saas-card p-8 group flex flex-col">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 bg-blue-50 text-saas-blue flex items-center justify-center rounded-2xl group-hover:scale-110 transition-transform">
+                                <i data-lucide="vote" class="w-7 h-7"></i>
+                            </div>
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-100 italic">Live Session</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#0f172a] mb-2">${e.title}</h4>
+                        <p class="text-slate-500 text-sm mb-8 flex-grow leading-relaxed">${e.description || 'Enterprise governance session processing with end-to-end encryption.'}</p>
+                        <div class="pt-6 border-t border-slate-50">
+                            <a href="vote.html?id=${e.id}" class="btn-saas-primary w-full shadow-lg shadow-blue-900/10">
+                                Access Ballot Center <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                `).join('') || `
+                    <div class="col-span-full p-20 text-center saas-card">
+                        <i data-lucide="inbox" class="w-12 h-12 text-slate-200 mx-auto mb-6"></i>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest">No active sessions found in your region.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        loadElections();
+    </script>
+</body>
+</html>

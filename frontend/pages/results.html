@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Registry | Votify Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'saas-blue': '#1e3a8a', 'saas-teal': '#14b8a6', 'saas-slate': '#0f172a' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-[#f8fafc] text-slate-900 font-inter min-h-screen pb-20">
+
+    <nav class="bg-white border-b border-slate-200 py-6 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="w-10 h-10 bg-saas-gradient flex items-center justify-center rounded-xl shadow-lg">
+                    <i data-lucide="vote" class="text-white w-6 h-6"></i>
+                </a>
+                <h1 class="text-2xl font-extrabold text-[#0f172a] tracking-tight">Results Registry</h1>
+            </div>
+            <a href="dashboard.html" id="backBtn" class="btn-saas-outline px-6 py-2.5 text-sm">Return to Terminal</a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 mt-12">
+        <div class="saas-card bg-saas-blue p-10 text-white mb-12 flex flex-col md:flex-row justify-between items-center gap-8 overflow-hidden relative">
+            <div class="absolute -bottom-10 -right-10 opacity-10">
+                <i data-lucide="bar-chart" class="w-64 h-64"></i>
+            </div>
+            <div class="relative z-10">
+                <h2 class="text-3xl font-extrabold mb-4 uppercase tracking-tighter">Election Intelligence</h2>
+                <p class="text-blue-100 max-w-lg font-medium">Verify democratic outcomes with cryptographically sealed results and real-time telemetry analytics.</p>
+            </div>
+            <div class="flex gap-4 relative z-10">
+                <div class="text-center bg-white/10 px-6 py-4 rounded-2xl border border-white/10">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-blue-200 mb-1">Status</p>
+                    <p class="font-extrabold">Authenticated</p>
+                </div>
+                <div class="text-center bg-white/10 px-6 py-4 rounded-2xl border border-white/10">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-blue-200 mb-1">Method</p>
+                    <p class="font-extrabold">Public Audit</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsGrid" class="grid lg:grid-cols-2 gap-8">
+            <!-- Loading state -->
+            <div class="col-span-full py-20 text-center">
+                <p class="text-slate-400 font-bold uppercase tracking-widest italic">Decrypting result packets...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/app.js"></script>
+    <script>
+        lucide.createIcons();
+        const user = api.getUser();
+        if (user && user.role === 'admin') {
+            document.getElementById('backBtn').href = 'admin.html';
+        }
+
+        async function loadResults() {
+            try {
+                const elections = await api.get('/elections/list');
+                const list = document.getElementById('resultsGrid');
+                
+                const resultsPromises = elections.map(e => api.get(`/elections/results?id=${e.id}`).catch(() => []));
+                const allResults = await Promise.all(resultsPromises);
+                
+                list.innerHTML = elections.map((e, idx) => {
+                    const results = allResults[idx];
+                    const totalVotes = results.reduce((acc, c) => acc + c.vote_count, 0);
+                    
+                    return `
+                        <div class="saas-card overflow-hidden">
+                            <div class="p-8 border-b border-slate-100 flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-xl font-extrabold text-[#0f172a] mb-1">${e.title}</h4>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Election outcome verified</p>
+                                </div>
+                                <div class="px-4 py-1.5 bg-slate-50 rounded-full border border-slate-100 text-[10px] font-bold uppercase tracking-widest">
+                                    Total: ${totalVotes} Votes
+                                </div>
+                            </div>
+                            <div class="p-8 space-y-6">
+                                ${results.length ? results.map(c => {
+                                    const percent = totalVotes > 0 ? (c.vote_count / totalVotes * 100).toFixed(1) : 0;
+                                    return `
+                                        <div>
+                                            <div class="flex justify-between items-end mb-3">
+                                                <p class="text-sm font-bold text-slate-900">${c.name}</p>
+                                                <p class="text-xs font-black text-saas-blue">${c.vote_count} <span class="text-slate-400 font-bold">(${percent}%)</span></p>
+                                            </div>
+                                            <div class="h-3 bg-slate-50 rounded-full overflow-hidden border border-slate-100">
+                                                <div class="h-full bg-saas-gradient transition-all duration-1000" style="width: ${percent}%"></div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('') : '<p class="text-center py-6 text-slate-400 text-xs font-bold uppercase tracking-widest">Waiting for session finalization</p>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                lucide.createIcons();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        loadResults();
+    </script>
+</body>
+</html>
