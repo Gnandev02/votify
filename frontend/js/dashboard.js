@@ -40,17 +40,19 @@ async function loadAdminDashboard() {
         const userTable = document.getElementById('usersTable');
         if (userTable && data.users) {
             userTable.innerHTML = data.users.map(u => `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <td class="px-8 py-6 font-bold text-white">${u.name}</td>
-                    <td class="px-8 py-6 text-slate-400 text-sm">${u.email}</td>
-                    <td class="px-8 py-6 text-slate-400 text-xs font-bold uppercase">${u.role}</td>
+                <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                    <td class="px-8 py-6 font-bold text-sidebar">${u.name}</td>
+                    <td class="px-8 py-6 text-slate-500 text-sm font-medium">${u.email}</td>
                     <td class="px-8 py-6">
-                        <span class="px-3 py-1 ${u.verified ? 'bg-emerald-600/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-600/10 text-amber-400 border-amber-500/20'} text-[10px] font-bold uppercase tracking-widest rounded-full border">
+                        <span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-slate-200">${u.role}</span>
+                    </td>
+                    <td class="px-8 py-6">
+                        <span class="px-3 py-1 ${u.verified ? 'bg-emerald-100 text-emerald-600 border-emerald-200' : 'bg-amber-100 text-amber-600 border-amber-200'} text-[10px] font-black uppercase tracking-widest rounded-full border">
                             ${u.verified ? 'Verified' : 'Pending'}
                         </span>
                     </td>
                 </tr>
-            `).join('');
+            `).join('') || '<tr><td colspan="4" class="px-8 py-12 text-center text-slate-400 font-bold uppercase tracking-widest italic">No users found</td></tr>';
         }
         lucide.createIcons();
     } catch (err) {
@@ -72,31 +74,31 @@ async function loadResults() {
             const totalVotes = results.reduce((acc, c) => acc + (c.vote_count || 0), 0);
             
             return `
-                <div class="saas-card bg-[#112947] border border-white/10 rounded-2xl shadow-xl overflow-hidden">
-                    <div class="p-8 border-b border-white/5 flex justify-between items-start">
+                <div class="admin-card !p-0 overflow-hidden reveal-up">
+                    <div class="p-8 border-b border-slate-100 flex justify-between items-start bg-slate-50/50">
                         <div>
-                            <h4 class="text-xl font-extrabold text-white mb-1">${e.title}</h4>
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Encryption status: Verified</p>
+                            <h4 class="text-xl font-black text-sidebar mb-1">${e.title}</h4>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Commission Reference: #${e.id}</p>
                         </div>
-                        <div class="px-4 py-1.5 bg-teal-600/10 rounded-full border border-teal-500/20 text-[10px] font-bold uppercase tracking-widest text-teal-400">
+                        <div class="px-4 py-1.5 bg-primary/10 rounded-full border border-primary/20 text-[10px] font-black uppercase tracking-widest text-primary">
                             Total: ${totalVotes} Votes
                         </div>
                     </div>
-                    <div class="p-8 space-y-6">
+                    <div class="p-8 space-y-8">
                         ${results.length ? results.map(c => {
                             const percent = totalVotes > 0 ? ((c.vote_count / totalVotes) * 100).toFixed(1) : 0;
                             return `
                                 <div>
                                     <div class="flex justify-between items-end mb-3">
-                                        <p class="text-sm font-bold text-slate-200">${c.name}</p>
-                                        <p class="text-xs font-black text-teal-400">${c.vote_count} <span class="text-slate-500 font-bold">(${percent}%)</span></p>
+                                        <p class="text-sm font-bold text-sidebar">${c.name}</p>
+                                        <p class="text-xs font-black text-primary">${c.vote_count} <span class="text-slate-400 font-bold">(${percent}%)</span></p>
                                     </div>
-                                    <div class="h-3 bg-[#0E2340] rounded-full overflow-hidden border border-white/5">
-                                        <div class="h-full bg-teal-600 transition-all duration-1000" style="width: ${percent}%"></div>
+                                    <div class="h-4 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 p-0.5">
+                                        <div class="h-full bg-primary rounded-full shadow-sm transition-all duration-1000" style="width: ${percent}%"></div>
                                     </div>
                                 </div>
                             `;
-                        }).join('') : '<p class="text-center py-6 text-slate-500 text-xs font-bold uppercase tracking-widest italic">Waiting for telemetry data</p>'}
+                        }).join('') : '<p class="text-center py-10 text-slate-400 text-[10px] font-black uppercase tracking-widest italic">Waiting for voter telemetry</p>'}
                     </div>
                 </div>
             `;

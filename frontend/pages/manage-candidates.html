@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Registry | Votify Admin</title>
+    <title>Manage Candidates | Votify Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { 'saas-blue': '#1e3a8a', 'saas-teal': '#14b8a6', 'saas-slate': '#0f172a' }
+                    colors: { 
+                        'primary': '#14b8a6', 
+                        'sidebar': '#1e293b', 
+                        'body-bg': '#0f172a'
+                    }
                 }
             }
         }
@@ -18,57 +22,68 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#0B1F3A] text-slate-100 font-inter min-h-screen">
+<body class="admin-bg font-inter text-slate-100 min-h-screen">
 
-    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-[#112947] border-r border-white/10 text-white z-50 shadow-2xl">
-        <div class="p-8 pb-12 flex items-center gap-3">
-            <div class="w-10 h-10 bg-teal-600 flex items-center justify-center rounded-xl shadow-lg">
+    <!-- Sidebar Navigation -->
+    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-sidebar border-r border-white/5 text-white z-50 shadow-2xl">
+        <div class="p-8 flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg">
                 <i data-lucide="vote" class="text-white w-6 h-6"></i>
             </div>
-            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-teal-400">.</span></span>
+            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-primary">.</span></span>
         </div>
 
-        <nav class="px-4 space-y-2">
-            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Administration</p>
-            <a href="admin.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
+        <nav class="px-6 mt-6 space-y-1">
+            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Administration</p>
+            <a href="admin.html" class="sidebar-item">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
             </a>
-            <a href="manage-elections.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
+            <a href="manage-elections.html" class="sidebar-item">
                 <i data-lucide="calendar" class="w-5 h-5"></i> Elections
             </a>
-            <a href="manage-candidates.html" class="flex items-center gap-4 px-4 py-3.5 bg-teal-600 text-white rounded-xl font-semibold shadow-lg shadow-teal-900/20">
+            <a href="manage-candidates.html" class="sidebar-item active">
                 <i data-lucide="users" class="w-5 h-5"></i> Candidates
             </a>
-            <div class="pt-8 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Intelligence</div>
-            <a href="results.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
+            <div class="pt-8 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Analytics</div>
+            <a href="results.html" class="sidebar-item">
                 <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Results
             </a>
         </nav>
+
+        <div class="absolute bottom-8 left-6 right-6">
+            <button onclick="api.logout()" class="sidebar-item w-full hover:text-red-400">
+                <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
+            </button>
+        </div>
     </aside>
 
+    <!-- Main Content Area -->
     <main class="ml-72 p-12">
         <header class="flex justify-between items-center mb-12">
             <div>
-                <h1 class="text-3xl font-extrabold text-white tracking-tight">Candidate Registry</h1>
-                <p class="text-slate-400 font-medium">Verify and authorize election participants</p>
+                <h1 class="admin-heading-1">Candidate Registry</h1>
+                <p class="admin-subheading">Verify and authorize participants for specific sessions</p>
             </div>
-            <button onclick="document.getElementById('candidateModal').classList.remove('hidden')" class="btn-primary bg-teal-600 hover:bg-teal-500 text-white px-6 py-2.5 rounded-xl transition-all flex items-center gap-2">
+            <button onclick="document.getElementById('candidateModal').classList.remove('hidden')" class="admin-btn-teal shadow-xl border-none">
                 Register Candidate <i data-lucide="user-plus" class="w-5 h-5"></i>
             </button>
         </header>
 
-        <div class="saas-card bg-[#112947] border border-white/10 rounded-2xl shadow-xl overflow-hidden">
-            <table class="w-full text-left border-collapse">
+        <div class="admin-card !p-0 overflow-hidden">
+            <div class="bg-slate-50/50 border-b border-slate-100 px-8 py-5">
+                <p class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Authorized Participants</p>
+            </div>
+            <table class="w-full text-left">
                 <thead>
-                    <tr class="bg-white/5 border-b border-white/10">
-                        <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Participant Name</th>
-                        <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Associated session</th>
-                        <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none flex justify-end">Actions</th>
+                    <tr class="border-b border-slate-100">
+                        <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Participant Name</th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Active Session</th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="candidatesTable">
+                <tbody id="candidatesTable" class="text-sidebar">
                     <tr>
-                        <td colspan="3" class="px-8 py-12 text-center text-slate-500 font-bold uppercase tracking-widest italic">Syncing candidate packets...</td>
+                        <td colspan="3" class="px-8 py-12 text-center text-slate-400 font-bold uppercase tracking-widest italic">Syncing candidate packets...</td>
                     </tr>
                 </tbody>
             </table>
@@ -76,11 +91,11 @@
     </main>
 
     <!-- Candidate Modal -->
-    <div id="candidateModal" class="fixed inset-0 bg-[#0B1F3A]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-        <div class="saas-card w-full max-w-xl p-0 overflow-hidden reveal-up bg-[#112947] border border-white/10 rounded-2xl shadow-2xl">
-            <div class="p-8 border-b border-white/5 flex justify-between items-center">
-                <h3 class="text-xl font-bold text-white">Register Candidate</h3>
-                <button onclick="document.getElementById('candidateModal').classList.add('hidden')" class="p-2 text-slate-500 hover:text-white transition-colors">
+    <div id="candidateModal" class="fixed inset-0 bg-body-bg/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="admin-card w-full max-w-xl !p-0 overflow-hidden reveal-up shadow-2xl border-none">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="text-xl font-bold text-sidebar">Register Candidate</h3>
+                <button onclick="document.getElementById('candidateModal').classList.add('hidden')" class="p-2 text-slate-400 hover:text-red-400 transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -88,16 +103,16 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Target Election Session</label>
-                        <select id="electionId" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 px-5 text-sm text-white focus:outline-none focus:border-teal-500 transition-all font-medium appearance-none">
+                        <select id="electionId" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-5 text-sm text-sidebar focus:outline-none focus:border-primary transition-all font-medium appearance-none">
                             <option value="">Select Session...</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Full Legal Name</label>
-                        <input type="text" id="name" required class="w-full bg-[#0E2340] border border-white/10 rounded-xl py-4 px-5 text-sm text-white focus:outline-none focus:border-teal-500 transition-all font-medium" placeholder="Authorized Candidate Name">
+                        <input type="text" id="name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-5 text-sm text-sidebar focus:outline-none focus:border-primary transition-all font-medium placeholder:text-slate-400" placeholder="Authorized Candidate Name">
                     </div>
                 </div>
-                <button type="submit" class="btn-primary w-full py-4 text-base shadow-xl bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition-all font-bold">
+                <button type="submit" class="admin-btn-teal w-full justify-center py-4 text-base shadow-xl">
                     Authorize Participant
                 </button>
             </form>
@@ -126,16 +141,16 @@
                     const candidates = allCandidatesGrouped[idx];
                     candidates.forEach(c => {
                         html += `
-                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
                                 <td class="px-8 py-6">
-                                    <p class="font-bold text-white">${c.name}</p>
-                                    <p class="text-[10px] text-slate-500 font-medium uppercase tracking-[0.05em]">Authorized ID: C-${c.id}</p>
+                                    <p class="font-bold text-sidebar">${c.name}</p>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Auth ID: C-${c.id}</p>
                                 </td>
                                 <td class="px-8 py-6">
-                                    <span class="px-3 py-1 bg-teal-600/10 text-teal-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-teal-500/20">${e.title}</span>
+                                    <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20">${e.title}</span>
                                 </td>
                                 <td class="px-8 py-6 text-right">
-                                    <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-slate-500 hover:text-red-400 transition-colors p-2">
+                                    <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-slate-400 hover:text-red-500 transition-colors p-2">
                                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                                     </button>
                                 </td>
@@ -156,7 +171,8 @@
             const btn = e.target.querySelector('button');
             try {
                 btn.disabled = true;
-                btn.innerHTML = 'Broadcasting Authorization...';
+                btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Authorizing...';
+                lucide.createIcons();
                 await api.post('/candidates?action=add', { 
                     election_id: document.getElementById('electionId').value,
                     name: document.getElementById('name').value
@@ -171,7 +187,7 @@
         });
 
         async function deleteCandidate(electionId, candidateId) {
-            if (!confirm('Are you sure you want to revoke this authorization?')) return;
+            if (!confirm('Revoke this participant\'s authorization?')) return;
             try {
                 await api.post('/candidates?action=delete', { election_id: electionId, candidate_id: candidateId });
                 loadData();

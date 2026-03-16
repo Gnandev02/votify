@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Command Center | Votify Admin</title>
+    <title>Admin Dashboard | Votify Secure Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { 'saas-blue': '#1e3a8a', 'saas-teal': '#14b8a6', 'saas-slate': '#0f172a' }
+                    colors: { 
+                        'primary': '#14b8a6', 
+                        'sidebar': '#1e293b', 
+                        'body-bg': '#0f172a',
+                        'slate-light': '#f8fafc'
+                    }
                 }
             }
         }
@@ -18,126 +23,141 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-[#0B1F3A] text-slate-100 font-inter min-h-screen">
+<body class="admin-bg font-inter text-slate-100 min-h-screen">
 
     <!-- Sidebar Navigation -->
-    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-[#112947] border-r border-white/10 text-white z-50 shadow-2xl">
-        <div class="p-8 pb-12 flex items-center gap-3">
-            <div class="w-10 h-10 bg-teal-600 flex items-center justify-center rounded-xl shadow-lg">
+    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-sidebar border-r border-white/5 text-white z-50 shadow-2xl">
+        <div class="p-8 flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg">
                 <i data-lucide="vote" class="text-white w-6 h-6"></i>
             </div>
-            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-teal-400">.</span></span>
+            <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-primary">.</span></span>
         </div>
 
-        <nav class="px-4 space-y-2">
-            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Administration</p>
-            <a href="admin.html" class="flex items-center gap-4 px-4 py-3.5 bg-teal-600 text-white rounded-xl font-semibold shadow-lg shadow-teal-900/20">
+        <nav class="px-6 mt-6 space-y-1">
+            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Administration</p>
+            <a href="admin.html" class="sidebar-item active">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
             </a>
-            <a href="manage-elections.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
+            <a href="manage-elections.html" class="sidebar-item">
                 <i data-lucide="calendar" class="w-5 h-5"></i> Elections
             </a>
-            <a href="manage-candidates.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
+            <a href="manage-candidates.html" class="sidebar-item">
                 <i data-lucide="users" class="w-5 h-5"></i> Candidates
             </a>
-            <div class="pt-8 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Intelligence</div>
-            <a href="results.html" class="flex items-center gap-4 px-4 py-3.5 text-slate-400 hover:bg-white/5 hover:text-white rounded-xl transition-all">
+            <div class="pt-8 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Analytics</div>
+            <a href="results.html" class="sidebar-item">
                 <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Results
             </a>
         </nav>
 
-        <div class="absolute bottom-8 left-4 right-4">
-            <button onclick="api.logout()" class="flex items-center gap-4 w-full px-4 py-3.5 text-slate-400 hover:text-red-400 transition-colors">
+        <div class="absolute bottom-8 left-6 right-6">
+            <button onclick="api.logout()" class="sidebar-item w-full hover:text-red-400">
                 <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
             </button>
         </div>
     </aside>
 
     <!-- Main Content Area -->
-    <main class="ml-72 p-12">
-        <header class="flex justify-between items-center mb-12">
-            <div>
-                <h1 class="text-3xl font-extrabold text-white tracking-tight">System Overview</h1>
-                <p class="text-slate-400 font-medium">Real-time governance activity</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="text-right">
-                    <p id="adminName" class="text-sm font-bold text-white">Administrator</p>
-                    <p class="text-[10px] font-bold text-teal-400 uppercase tracking-widest">Platform Admin</p>
+    <div class="ml-72 flex flex-col min-h-screen">
+        <main class="p-12 flex-grow">
+            <!-- Header -->
+            <header class="flex justify-between items-center mb-12">
+                <div>
+                    <h1 class="admin-heading-1">System Overview</h1>
+                    <p class="admin-subheading">Control and monitor all platform activities</p>
                 </div>
-                <div class="w-12 h-12 bg-[#112947] rounded-full border border-white/10 flex items-center justify-center shadow-sm">
-                    <i data-lucide="user" class="text-slate-500 w-6 h-6"></i>
-                </div>
-            </div>
-        </header>
-
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="saas-card p-8 group">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Total Elections</p>
-                <div class="flex items-end justify-between">
-                    <div class="text-4xl font-extrabold text-saas-blue" id="totalElections">0</div>
-                    <div class="w-12 h-12 bg-blue-50 text-saas-blue flex items-center justify-center rounded-xl">
-                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                <div class="flex items-center gap-4 bg-sidebar/50 p-3 rounded-2xl border border-white/5 shadow-sm">
+                    <div class="text-right">
+                        <p id="adminName" class="text-sm font-bold text-white">Administrator</p>
+                        <span class="text-[10px] font-extrabold text-primary uppercase tracking-widest">Platform Admin</span>
+                    </div>
+                    <div class="w-11 h-11 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30">
+                        <i data-lucide="user" class="text-primary w-5 h-5"></i>
                     </div>
                 </div>
-            </div>
-            
-            <div class="saas-card p-8 group">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Active Voters</p>
-                <div class="flex items-end justify-between">
-                    <div class="text-4xl font-extrabold text-saas-teal" id="totalVoters">0</div>
-                    <div class="w-12 h-12 bg-teal-50 text-saas-teal flex items-center justify-center rounded-xl">
-                        <i data-lucide="users" class="w-6 h-6"></i>
-                    </div>
-                </div>
-            </div>
+            </header>
 
-            <div class="saas-card p-8 group">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Votes Cast</p>
-                <div class="flex items-end justify-between">
-                    <div class="text-4xl font-extrabold text-emerald-600" id="totalVotes">0</div>
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 flex items-center justify-center rounded-xl">
-                        <i data-lucide="vote" class="w-6 h-6"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions & Recent -->
-        <div class="grid lg:grid-cols-2 gap-8">
-            <div class="saas-card p-8">
-                <h3 class="text-lg font-bold text-[#0f172a] mb-8 flex items-center gap-3">
-                    <i data-lucide="zap" class="text-saas-teal w-5 h-5"></i> Quick Operations
-                </h3>
-                <div class="grid grid-cols-2 gap-6">
-                    <a href="manage-elections.html" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-saas-blue transition-all group">
-                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mb-4 shadow-sm group-hover:bg-saas-blue group-hover:text-white transition-all">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="admin-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="admin-metric-label">Total Elections</p>
+                        <div class="w-10 h-10 bg-teal-50 text-primary flex items-center justify-center rounded-lg">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
                         </div>
-                        <p class="font-bold text-sm text-[#0f172a]">New Election</p>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Configure Parameters</p>
-                    </a>
-                    <a href="manage-candidates.html" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-saas-teal transition-all group">
-                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mb-4 shadow-sm group-hover:bg-saas-teal group-hover:text-white transition-all">
-                            <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    </div>
+                    <div class="admin-metric-value" id="totalElections">0</div>
+                    <p class="text-xs text-slate-500 mt-2 font-medium">All time created</p>
+                </div>
+                
+                <div class="admin-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="admin-metric-label">Active Voters</p>
+                        <div class="w-10 h-10 bg-teal-50 text-primary flex items-center justify-center rounded-lg">
+                            <i data-lucide="users" class="w-5 h-5"></i>
                         </div>
-                        <p class="font-bold text-sm text-[#0f172a]">Add Candidate</p>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Register Participant</p>
-                    </a>
+                    </div>
+                    <div class="admin-metric-value" id="totalVoters">0</div>
+                    <p class="text-xs text-slate-500 mt-2 font-medium">Verified participants</p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="admin-metric-label">Votes Cast</p>
+                        <div class="w-10 h-10 bg-teal-50 text-primary flex items-center justify-center rounded-lg">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="admin-metric-value" id="totalVotes">0</div>
+                    <p class="text-xs text-slate-500 mt-2 font-medium">Total successful ballots</p>
                 </div>
             </div>
 
-            <div class="saas-card p-8">
-                <h3 class="text-lg font-bold text-[#0f172a] mb-8 flex items-center gap-3">
-                    <i data-lucide="activity" class="text-saas-blue w-5 h-5"></i> Recent Activity
-                </h3>
-                <div id="activityLog" class="space-y-4">
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest italic">Syncing logs...</p>
+            <!-- Operations & Activity -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Quick Operations -->
+                <div class="admin-card p-8">
+                    <h3 class="text-lg font-bold text-sidebar mb-8 flex items-center gap-3">
+                        <i data-lucide="zap" class="text-primary w-5 h-5"></i> Quick Actions
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <a href="manage-elections.html" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/50 hover:bg-white transition-all group">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
+                                <i data-lucide="plus-circle" class="w-6 h-6"></i>
+                            </div>
+                            <p class="font-bold text-sidebar">New Election</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Configure parameters</p>
+                        </a>
+                        <a href="manage-candidates.html" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/50 hover:bg-white transition-all group">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
+                                <i data-lucide="user-plus" class="w-6 h-6"></i>
+                            </div>
+                            <p class="font-bold text-sidebar">Add Candidate</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Register participant</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="admin-card p-8">
+                    <h3 class="text-lg font-bold text-sidebar mb-8 flex items-center gap-3">
+                        <i data-lucide="activity" class="text-primary w-5 h-5"></i> Platform Activity
+                    </h3>
+                    <div id="activityLog" class="space-y-4 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="p-4 bg-slate-50 rounded-xl flex items-center gap-4 animate-pulse">
+                            <div class="w-2 h-2 rounded-full bg-primary/40"></div>
+                            <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+        
+        <footer class="p-8 border-t border-white/5 text-center">
+            <p class="text-slate-500 text-xs font-medium">© 2026 Votify Governance Platform • Secure Admin Panel</p>
+        </footer>
+    </div>
 
     <script src="../js/app.js"></script>
     <script src="../js/dashboard.js"></script>
