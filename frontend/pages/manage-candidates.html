@@ -11,8 +11,11 @@
                 extend: {
                     colors: { 
                         'primary': '#14b8a6', 
-                        'sidebar': '#1e293b', 
-                        'body-bg': '#0f172a'
+                        'sidebar': '#020617', 
+                        'body-bg': '#0f172a',
+                        'slate-dark': '#1e293b',
+                        'text-primary': '#e2e8f0',
+                        'text-secondary': '#94a3b8'
                     }
                 }
             }
@@ -22,13 +25,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="admin-bg font-inter text-slate-100 min-h-screen">
+<body class="admin-bg font-inter text-text-primary min-h-screen">
 
     <!-- Sidebar Navigation -->
     <aside class="fixed top-0 left-0 bottom-0 w-72 bg-sidebar border-r border-white/5 text-white z-50 shadow-2xl">
         <div class="p-8 flex items-center gap-3">
             <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg">
-                <i data-lucide="vote" class="text-white w-6 h-6"></i>
+                <i data-lucide="vote" class="text-sidebar w-6 h-6"></i>
             </div>
             <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-primary">.</span></span>
         </div>
@@ -51,7 +54,7 @@
         </nav>
 
         <div class="absolute bottom-8 left-6 right-6">
-            <button onclick="api.logout()" class="sidebar-item w-full hover:text-red-400">
+            <button onclick="api.logout()" class="sidebar-item w-full hover:bg-red-500/10 hover:text-red-400">
                 <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
             </button>
         </div>
@@ -65,25 +68,25 @@
                 <p class="admin-subheading">Verify and authorize participants for specific sessions</p>
             </div>
             <button onclick="document.getElementById('candidateModal').classList.remove('hidden')" class="admin-btn-teal shadow-xl border-none">
-                Register Candidate <i data-lucide="user-plus" class="w-5 h-5"></i>
+                Register Candidate <i data-lucide="user-plus" class="w-5 h-5 ml-1"></i>
             </button>
         </header>
 
-        <div class="admin-card !p-0 overflow-hidden">
-            <div class="bg-slate-50/50 border-b border-slate-100 px-8 py-5">
-                <p class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Authorized Participants</p>
+        <div class="admin-table-container">
+            <div class="bg-white/5 border-b border-white/5 px-8 py-5">
+                <p class="text-[10px] font-black text-text-secondary uppercase tracking-widest">Authorized Participants</p>
             </div>
-            <table class="w-full text-left">
+            <table class="admin-table w-full text-left">
                 <thead>
-                    <tr class="border-b border-slate-100">
-                        <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Participant Name</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Active Session</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none text-right">Actions</th>
+                    <tr>
+                        <th class="text-[10px] font-bold text-text-secondary uppercase tracking-widest">Participant Name</th>
+                        <th class="text-[10px] font-bold text-text-secondary uppercase tracking-widest">Active Session</th>
+                        <th class="text-[10px] font-bold text-text-secondary uppercase tracking-widest text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="candidatesTable" class="text-sidebar">
+                <tbody id="candidatesTable">
                     <tr>
-                        <td colspan="3" class="px-8 py-12 text-center text-slate-400 font-bold uppercase tracking-widest italic">Syncing candidate packets...</td>
+                        <td colspan="3" class="px-8 py-12 text-center text-text-secondary font-bold uppercase tracking-widest italic">Syncing candidate packets...</td>
                     </tr>
                 </tbody>
             </table>
@@ -91,28 +94,26 @@
     </main>
 
     <!-- Candidate Modal -->
-    <div id="candidateModal" class="fixed inset-0 bg-body-bg/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-        <div class="admin-card w-full max-w-xl !p-0 overflow-hidden reveal-up shadow-2xl border-none">
-            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 class="text-xl font-bold text-sidebar">Register Candidate</h3>
-                <button onclick="document.getElementById('candidateModal').classList.add('hidden')" class="p-2 text-slate-400 hover:text-red-400 transition-colors">
+    <div id="candidateModal" class="fixed inset-0 bg-sidebar/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="admin-card w-full max-w-xl !p-0 overflow-hidden reveal-up shadow-2xl border-white/5">
+            <div class="p-8 border-b border-white/5 flex justify-between items-center bg-white/2">
+                <h3 class="text-xl font-bold text-text-primary">Register Candidate</h3>
+                <button onclick="document.getElementById('candidateModal').classList.add('hidden')" class="p-2 text-text-secondary hover:text-red-400 transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <form id="candidateForm" class="p-10 space-y-8">
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Target Election Session</label>
-                        <select id="electionId" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-5 text-sm text-sidebar focus:outline-none focus:border-primary transition-all font-medium appearance-none">
-                            <option value="">Select Session...</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Full Legal Name</label>
-                        <input type="text" id="name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 px-5 text-sm text-sidebar focus:outline-none focus:border-primary transition-all font-medium placeholder:text-slate-400" placeholder="Authorized Candidate Name">
-                    </div>
+            <form id="candidateForm" class="p-8 space-y-6">
+                <div>
+                    <label class="block text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-3">Target Election Session</label>
+                    <select id="electionId" required class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-sm text-text-primary focus:outline-none focus:border-primary transition-all font-medium appearance-none cursor-pointer">
+                        <option value="" class="bg-sidebar">Select Session...</option>
+                    </select>
                 </div>
-                <button type="submit" class="admin-btn-teal w-full justify-center py-4 text-base shadow-xl">
+                <div>
+                    <label class="block text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-3">Full Legal Name</label>
+                    <input type="text" id="name" required class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-sm text-text-primary focus:outline-none focus:border-primary transition-all font-medium placeholder:text-slate-600" placeholder="Authorized Candidate Name">
+                </div>
+                <button type="submit" class="admin-btn-teal w-full justify-center py-4 text-base shadow-xl mt-4">
                     Authorize Participant
                 </button>
             </form>
@@ -129,7 +130,9 @@
             try {
                 const elections = await api.get('/elections');
                 const select = document.getElementById('electionId');
-                select.innerHTML += elections.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+                // Keep the default option
+                select.innerHTML = '<option value="" class="bg-sidebar">Select Session...</option>' + 
+                                  elections.map(e => `<option value="${e.id}" class="bg-sidebar">${e.title}</option>`).join('');
 
                 const candidatesPromises = elections.map(e => api.get(`/candidates?election_id=${e.id}`).catch(() => []));
                 const allCandidatesGrouped = await Promise.all(candidatesPromises);
@@ -141,16 +144,16 @@
                     const candidates = allCandidatesGrouped[idx];
                     candidates.forEach(c => {
                         html += `
-                            <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                            <tr>
                                 <td class="px-8 py-6">
-                                    <p class="font-bold text-sidebar">${c.name}</p>
-                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Auth ID: C-${c.id}</p>
+                                    <p class="font-bold text-text-primary">${c.name}</p>
+                                    <p class="text-[10px] text-text-secondary font-bold uppercase tracking-wider">Auth ID: C-${c.id}</p>
                                 </td>
                                 <td class="px-8 py-6">
                                     <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20">${e.title}</span>
                                 </td>
                                 <td class="px-8 py-6 text-right">
-                                    <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-slate-400 hover:text-red-500 transition-colors p-2">
+                                    <button onclick="deleteCandidate(${e.id}, ${c.id})" class="text-text-secondary hover:text-red-500 transition-colors p-2">
                                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                                     </button>
                                 </td>
@@ -159,7 +162,7 @@
                     });
                 });
                 
-                tbody.innerHTML = html || '<tr><td colspan="3" class="px-8 py-12 text-center text-slate-400 font-bold uppercase tracking-widest">No candidates authorized</td></tr>';
+                tbody.innerHTML = html || '<tr><td colspan="3" class="px-8 py-12 text-center text-text-secondary font-bold uppercase tracking-widest">No candidates authorized</td></tr>';
                 lucide.createIcons();
             } catch (err) {
                 console.error(err);
@@ -171,7 +174,7 @@
             const btn = e.target.querySelector('button');
             try {
                 btn.disabled = true;
-                btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Authorizing...';
+                btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin mr-2"></i> Authorizing...';
                 lucide.createIcons();
                 await api.post('/candidates?action=add', { 
                     election_id: document.getElementById('electionId').value,
@@ -189,7 +192,7 @@
         async function deleteCandidate(electionId, candidateId) {
             if (!confirm('Revoke this participant\'s authorization?')) return;
             try {
-                await api.post('/candidates?action=delete', { election_id: electionId, candidate_id: candidateId });
+                await api.post('/candidates?action=delete', { election_id: electionId, candidate_id: candidate_id });
                 loadData();
             } catch (err) {
                 alert(err.message);

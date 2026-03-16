@@ -11,9 +11,11 @@
                 extend: {
                     colors: { 
                         'primary': '#14b8a6', 
-                        'sidebar': '#1e293b', 
+                        'sidebar': '#020617', 
                         'body-bg': '#0f172a',
-                        'slate-light': '#f8fafc'
+                        'slate-dark': '#1e293b',
+                        'text-primary': '#e2e8f0',
+                        'text-secondary': '#94a3b8'
                     }
                 }
             }
@@ -23,13 +25,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="admin-bg font-inter text-slate-100 min-h-screen">
+<body class="admin-bg font-inter text-text-primary min-h-screen">
 
     <!-- Sidebar Navigation -->
     <aside class="fixed top-0 left-0 bottom-0 w-72 bg-sidebar border-r border-white/5 text-white z-50 shadow-2xl">
         <div class="p-8 flex items-center gap-3">
             <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg">
-                <i data-lucide="vote" class="text-white w-6 h-6"></i>
+                <i data-lucide="vote" class="text-sidebar w-6 h-6"></i>
             </div>
             <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-primary">.</span></span>
         </div>
@@ -52,7 +54,7 @@
         </nav>
 
         <div class="absolute bottom-8 left-6 right-6">
-            <button onclick="api.logout()" class="sidebar-item w-full hover:text-red-400">
+            <button onclick="api.logout()" class="sidebar-item w-full hover:bg-red-500/10 hover:text-red-400">
                 <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
             </button>
         </div>
@@ -67,9 +69,9 @@
                     <h1 class="admin-heading-1">System Overview</h1>
                     <p class="admin-subheading">Control and monitor all platform activities</p>
                 </div>
-                <div class="flex items-center gap-4 bg-sidebar/50 p-3 rounded-2xl border border-white/5 shadow-sm">
+                <div class="flex items-center gap-4 bg-slate-dark/50 p-3 rounded-2xl border border-white/5 shadow-sm">
                     <div class="text-right">
-                        <p id="adminName" class="text-sm font-bold text-white">Administrator</p>
+                        <p id="adminName" class="text-sm font-bold text-text-primary">Administrator</p>
                         <span class="text-[10px] font-extrabold text-primary uppercase tracking-widest">Platform Admin</span>
                     </div>
                     <div class="w-11 h-11 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30">
@@ -83,71 +85,73 @@
                 <div class="admin-card">
                     <div class="flex items-center justify-between mb-4">
                         <p class="admin-metric-label">Total Elections</p>
-                        <div class="w-10 h-10 bg-teal-50 text-primary flex items-center justify-center rounded-lg">
+                        <div class="w-10 h-10 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
                             <i data-lucide="calendar" class="w-5 h-5"></i>
                         </div>
                     </div>
                     <div class="admin-metric-value" id="totalElections">0</div>
-                    <p class="text-xs text-slate-500 mt-2 font-medium">All time created</p>
+                    <p class="text-[10px] text-text-secondary mt-2 font-bold uppercase tracking-wider">All-time registry packets</p>
                 </div>
                 
                 <div class="admin-card">
                     <div class="flex items-center justify-between mb-4">
                         <p class="admin-metric-label">Active Voters</p>
-                        <div class="w-10 h-10 bg-teal-50 text-primary flex items-center justify-center rounded-lg">
+                        <div class="w-10 h-10 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
                             <i data-lucide="users" class="w-5 h-5"></i>
                         </div>
                     </div>
                     <div class="admin-metric-value" id="totalVoters">0</div>
-                    <p class="text-xs text-slate-500 mt-2 font-medium">Verified participants</p>
+                    <p class="text-[10px] text-text-secondary mt-2 font-bold uppercase tracking-wider">Authenticated participants</p>
                 </div>
 
                 <div class="admin-card">
                     <div class="flex items-center justify-between mb-4">
                         <p class="admin-metric-label">Votes Cast</p>
-                        <div class="w-10 h-10 bg-teal-50 text-primary flex items-center justify-center rounded-lg">
+                        <div class="w-10 h-10 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
                             <i data-lucide="check-circle" class="w-5 h-5"></i>
                         </div>
                     </div>
                     <div class="admin-metric-value" id="totalVotes">0</div>
-                    <p class="text-xs text-slate-500 mt-2 font-medium">Total successful ballots</p>
+                    <p class="text-[10px] text-text-secondary mt-2 font-bold uppercase tracking-wider">Verified ballots sealed</p>
                 </div>
             </div>
 
             <!-- Operations & Activity -->
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Quick Operations -->
-                <div class="admin-card p-8">
-                    <h3 class="text-lg font-bold text-sidebar mb-8 flex items-center gap-3">
+                <div class="admin-card">
+                    <h3 class="text-lg font-bold text-text-primary mb-8 flex items-center gap-3">
                         <i data-lucide="zap" class="text-primary w-5 h-5"></i> Quick Actions
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <a href="manage-elections.html" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/50 hover:bg-white transition-all group">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
+                        <a href="manage-elections.html" class="action-card p-6 group">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-sidebar transition-all">
                                 <i data-lucide="plus-circle" class="w-6 h-6"></i>
                             </div>
-                            <p class="font-bold text-sidebar">New Election</p>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Configure parameters</p>
+                            <p class="font-bold text-text-primary">New Election</p>
+                            <p class="text-[10px] text-text-secondary font-bold uppercase tracking-wider mt-1">Configure parameters</p>
                         </a>
-                        <a href="manage-candidates.html" class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/50 hover:bg-white transition-all group">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
+                        <a href="manage-candidates.html" class="action-card p-6 group">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-sidebar transition-all">
                                 <i data-lucide="user-plus" class="w-6 h-6"></i>
                             </div>
-                            <p class="font-bold text-sidebar">Add Candidate</p>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Register participant</p>
+                            <p class="font-bold text-text-primary">Add Candidate</p>
+                            <p class="text-[10px] text-text-secondary font-bold uppercase tracking-wider mt-1">Register participant</p>
                         </a>
                     </div>
                 </div>
 
                 <!-- Activity Log -->
-                <div class="admin-card p-8">
-                    <h3 class="text-lg font-bold text-sidebar mb-8 flex items-center gap-3">
+                <div class="admin-card">
+                    <h3 class="text-lg font-bold text-text-primary mb-8 flex items-center gap-3">
                         <i data-lucide="activity" class="text-primary w-5 h-5"></i> Platform Activity
                     </h3>
                     <div id="activityLog" class="space-y-4 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-                        <div class="p-4 bg-slate-50 rounded-xl flex items-center gap-4 animate-pulse">
-                            <div class="w-2 h-2 rounded-full bg-primary/40"></div>
-                            <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <!-- Activity items go here -->
+                        <div class="p-4 bg-white/5 rounded-xl flex items-center gap-4 animate-pulse">
+                            <div class="activity-bar w-full">
+                                <div class="activity-progress animate-pulse-slow" style="width: 60%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,7 +159,7 @@
         </main>
         
         <footer class="p-8 border-t border-white/5 text-center">
-            <p class="text-slate-500 text-xs font-medium">© 2026 Votify Governance Platform • Secure Admin Panel</p>
+            <p class="text-text-secondary text-[10px] font-bold uppercase tracking-widest">© 2026 Votify Governance Platform • Cryptographically Secured</p>
         </footer>
     </div>
 

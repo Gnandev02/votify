@@ -11,8 +11,11 @@
                 extend: {
                     colors: { 
                         'primary': '#14b8a6', 
-                        'sidebar': '#1e293b', 
-                        'body-bg': '#0f172a'
+                        'sidebar': '#020617', 
+                        'body-bg': '#0f172a',
+                        'slate-dark': '#1e293b',
+                        'text-primary': '#e2e8f0',
+                        'text-secondary': '#94a3b8'
                     }
                 }
             }
@@ -22,13 +25,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="admin-bg font-inter text-slate-100 min-h-screen">
+<body class="admin-bg font-inter text-text-primary min-h-screen">
 
     <!-- Sidebar Navigation -->
     <aside class="fixed top-0 left-0 bottom-0 w-72 bg-sidebar border-r border-white/5 text-white z-50 shadow-2xl">
         <div class="p-8 flex items-center gap-3">
             <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg">
-                <i data-lucide="vote" class="text-white w-6 h-6"></i>
+                <i data-lucide="vote" class="text-sidebar w-6 h-6"></i>
             </div>
             <span class="text-2xl font-black tracking-tighter text-white">Votify<span class="text-primary">.</span></span>
         </div>
@@ -51,7 +54,7 @@
         </nav>
 
         <div class="absolute bottom-8 left-6 right-6">
-            <button onclick="api.logout()" class="sidebar-item w-full hover:text-red-400">
+            <button onclick="api.logout()" class="sidebar-item w-full hover:bg-red-500/10 hover:text-red-400">
                 <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
             </button>
         </div>
@@ -64,16 +67,16 @@
                 <h1 class="admin-heading-1">Election Intelligence</h1>
                 <p class="admin-subheading">Real-time telemetry and cryptographic result verification</p>
             </div>
-            <div class="px-6 py-3 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center gap-3 text-sidebar">
+            <div class="px-6 py-3 bg-white/5 rounded-xl shadow-sm border border-white/5 flex items-center gap-3">
                 <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                <span class="text-sm font-bold opacity-80">Live Sync Active</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-text-primary opacity-80">Live Sync Active</span>
             </div>
         </header>
 
         <div id="resultsGrid" class="grid lg:grid-cols-2 gap-8">
             <!-- Loading state -->
-            <div class="col-span-full py-20 text-center admin-card !bg-slate-50 border-dashed border-slate-200 shadow-none">
-                <p class="text-slate-400 font-bold uppercase tracking-widest italic animate-pulse">Decrypting result packets...</p>
+            <div class="col-span-full py-20 text-center admin-card !bg-white/2 border-dashed border-white/10 shadow-none">
+                <p class="text-text-secondary font-bold uppercase tracking-widest italic animate-pulse">Decrypting result packets...</p>
             </div>
         </div>
     </main>

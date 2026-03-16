@@ -684,91 +684,150 @@ body {
 }
 
 /* ============================================================
-   ADMIN DASHBOARD OVERHAUL (SaaS Style)
+   ADMIN DASHBOARD OVERHAUL (Premium Dark SaaS)
    ============================================================ */
 .admin-bg { background-color: #0f172a; }
-.admin-sidebar { background-color: #1e293b; }
+.admin-sidebar { background-color: #020617; }
 
 .admin-card {
-  background: #ffffff;
-  border-radius: 16px;
+  background: #1e293b;
+  border-radius: 14px;
   padding: 24px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  border: 1px solid rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  color: #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .admin-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+  border-color: rgba(20,184,166,0.2);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: 12px;
+  padding: 12px 20px;
+  border-radius: 10px;
   color: #94a3b8;
   font-weight: 600;
   transition: all 0.2s ease;
   text-decoration: none;
+  border-left: 3px solid transparent;
 }
 
 .sidebar-item:hover {
-  background: rgba(20,184,166,0.15);
-  color: #14b8a6;
+  background: rgba(255,255,255,0.03);
+  color: #e2e8f0;
 }
 
 .sidebar-item.active {
-  background: #14b8a6;
-  color: #ffffff;
-  box-shadow: 0 8px 20px rgba(20,184,166,0.3);
+  background: rgba(20,184,166,0.12);
+  color: #14b8a6;
+  border-left-color: #14b8a6;
 }
 
 .admin-metric-value {
-  color: #0f172a;
-  font-size: 2.5rem;
-  font-weight: 800;
-  line-height: 1.2;
+  color: #e2e8f0;
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .admin-metric-label {
-  color: #64748b;
-  font-size: 0.875rem;
-  font-weight: 600;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .admin-btn-teal {
   background-color: #14b8a6;
-  color: white;
+  color: #020617;
   padding: 12px 24px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(20,184,166,0.2);
+  border: none;
+  cursor: pointer;
 }
 
 .admin-btn-teal:hover {
-  background-color: #0d9488;
+  background-color: #2dd4bf;
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(20,184,166,0.3);
+  box-shadow: 0 0 20px rgba(20,184,166,0.4);
 }
 
 .admin-heading-1 {
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f8fafc;
   letter-spacing: -0.02em;
 }
 
 .admin-subheading {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: #94a3b8;
   font-weight: 500;
+}
+
+/* Action Cards with Glow */
+.action-card {
+  background: #1e293b;
+  border: 1px solid rgba(20,184,166,0.15);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.action-card:hover {
+  border-color: rgba(20,184,166,0.4);
+  background: #243147;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.activity-bar {
+  background: #334155;
+  height: 8px;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.activity-progress {
+  background: #14b8a6;
+  height: 100%;
+  border-radius: 99px;
+  box-shadow: 0 0 10px rgba(20,184,166,0.3);
+}
+
+/* Dark Table Styles */
+.admin-table-container {
+  border-radius: 14px;
+  background: #1e293b;
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.admin-table thead {
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.admin-table tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s ease;
+}
+
+.admin-table tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.admin-table td, .admin-table th {
+  padding: 16px 24px;
 }
