@@ -3,6 +3,10 @@ import bcrypt from 'bcryptjs';
 import { generateToken } from '../lib/authUtils.js';
 import { sendOTP } from '../lib/email.js';
 
+// In-memory storage for pending registrations
+// NOTE: This will be cleared on Vercel cold starts/restarts
+let pendingUsers = {};
+
 export default async function handler(req, res) {
     // Ensure all responses are JSON
     res.setHeader('Content-Type', 'application/json');
@@ -19,12 +23,14 @@ export default async function handler(req, res) {
 
             if (resend) {
                 if (!email) return res.status(400).json({ success: false, message: 'Email required for resend' });
-                const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-                if (userCheck.rows.length === 0) return res.status(404).json({ success: false, message: 'User not found' });
+                
+                // Check pending users first
+                const pendingUser = pendingUsers[email];
+                if (!pendingUser) return res.status(404).json({ success: false, message: 'No pending registration found for this email' });
                 
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
-                const expiresAt = new Date(Date.now() + 10 * 60000);
-                await pool.query('INSERT INTO otps (email, otp, expires_at) ON CONFLICT (email) DO UPDATE SET otp = $2, expires_at = $3', [email, otp, expiresAt]);
+                pendingUser.otp = otp;
+                pendingUser.expiresAt = new Date(Date.now() + 10 * 60000);
                 
                 await sendOTP(email, otp);
                 return res.status(200).json({ success: true, message: 'New OTP sent successfully.' });
@@ -32,29 +38,34 @@ export default async function handler(req, res) {
 
             if (!name || !email || !password) return res.status(400).json({ success: false, message: 'Missing required fields' });
             
+            // Still check if email is already in the DB (verified users)
             const existing = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-            if (existing.rows.length > 0) return res.status(409).json({ success: false, message: 'Email already exists' });
+            if (existing.rows.length > 0) return res.status(409).json({ success: false, message: 'Email already exists and is verified' });
 
             const hashedPassword = await bcrypt.hash(password, 10);
             const assignedRole = role === 'admin' ? 'admin' : 'voter';
             
-            // Create user (unverified)
-            await pool.query('INSERT INTO users (name, email, password, role, verified) VALUES ($1, $2, $3, $4, false)', [name, email, hashedPassword, assignedRole]);
-            
-            // Generate and store OTP
+            // Generate OTP
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
             const expiresAt = new Date(Date.now() + 10 * 60000);
-            await pool.query('INSERT INTO otps (email, otp, expires_at) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET otp = $2, expires_at = $3', [email, otp, expiresAt]);
+            
+            // Store user data in memory temporarily
+            pendingUsers[email] = {
+                name,
+                email,
+                password: hashedPassword,
+                role: assignedRole,
+                otp,
+                expiresAt
+            };
             
             try {
                 await sendOTP(email, otp);
-                return res.status(200).json({ success: true, message: 'OTP sent successfully. Please verify your email.' });
+                return res.status(200).json({ success: true, message: 'OTP sent to your email. Please verify to complete registration.' });
             } catch (emailError) {
                 console.error('[Registration Error] Failed to send OTP:', emailError);
-                // Cleanup on email failure
-                await pool.query('DELETE FROM otps WHERE email = $1', [email]);
-                await pool.query('DELETE FROM users WHERE email = $1', [email]);
-                return res.status(500).json({ success: false, message: 'Failed to send OTP email. Account creation reverted.' });
+                delete pendingUsers[email]; // Cleanup
+                return res.status(500).json({ success: false, message: 'Failed to send OTP email.' });
             }
         }
 
@@ -62,15 +73,35 @@ export default async function handler(req, res) {
             const { email, otp } = req.body;
             if (!email || !otp) return res.status(400).json({ success: false, message: 'Missing required fields' });
             
-            const result = await pool.query('SELECT * FROM otps WHERE email = $1 AND otp = $2', [email, otp]);
-            if (result.rows.length === 0) return res.status(400).json({ success: false, message: 'Invalid OTP' });
+            const pendingUser = pendingUsers[email];
+            if (!pendingUser) {
+                return res.status(400).json({ success: false, message: 'No pending registration found. Please register again.' });
+            }
             
-            if (new Date() > new Date(result.rows[0].expires_at)) return res.status(400).json({ success: false, message: 'OTP has expired' });
+            if (pendingUser.otp !== otp) {
+                return res.status(400).json({ success: false, message: 'Invalid OTP' });
+            }
             
-            await pool.query('UPDATE users SET verified = true WHERE email = $1', [email]);
-            await pool.query('DELETE FROM otps WHERE email = $1', [email]);
+            if (new Date() > new Date(pendingUser.expiresAt)) {
+                delete pendingUsers[email];
+                return res.status(400).json({ success: false, message: 'OTP has expired' });
+            }
             
-            return res.status(200).json({ success: true, message: 'Account verified successfully!' });
+            // OTP is valid, now create the user in the database
+            try {
+                await pool.query(
+                    'INSERT INTO users (name, email, password, role, verified) VALUES ($1, $2, $3, $4, true)', 
+                    [pendingUser.name, pendingUser.email, pendingUser.password, pendingUser.role]
+                );
+                
+                // Remove from pending storage
+                delete pendingUsers[email];
+                
+                return res.status(200).json({ success: true, message: 'Account verified and created successfully!' });
+            } catch (dbError) {
+                console.error('[DB Error] Failed to create user:', dbError);
+                return res.status(500).json({ success: false, message: 'Failed to create user account.' });
+            }
         }
 
         if (action === 'login') {
@@ -81,6 +112,7 @@ export default async function handler(req, res) {
             if (result.rows.length === 0) return res.status(401).json({ success: false, message: 'Invalid credentials' });
             
             const user = result.rows[0];
+            // Since we only create users after verification now, user.verified should be true, but we'll check anyway
             if (!user.verified) return res.status(403).json({ success: false, message: 'Please verify your email first' });
             
             const isValid = await bcrypt.compare(password, user.password);
