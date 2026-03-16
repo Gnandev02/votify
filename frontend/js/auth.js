@@ -23,12 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ email, password })
                 });
 
-                const data = await response.json();
+                const contentType = response.headers.get("content-type");
+                let data;
+                if (contentType && contentType.includes("application/json")) {
+                    data = await response.json();
+                } else {
+                    const text = await response.text();
+                    throw new Error(`Server Error: ${text.substring(0, 100)}...`);
+                }
+
                 if (!response.ok) throw new Error(data.message || 'Login failed');
 
                 api.saveAuth(data.user, data.token);
                 window.location.href = data.user.role === 'admin' ? 'admin.html' : 'dashboard.html';
             } catch (err) {
+                console.error('Login Error:', err);
                 alert(err.message);
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -60,13 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(data)
                 });
 
-                const result = await response.json();
+                const contentType = response.headers.get("content-type");
+                let result;
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                } else {
+                    const text = await response.text();
+                    throw new Error(`Server Error: ${text.substring(0, 100)}...`);
+                }
+
                 if (!response.ok) throw new Error(result.message || 'Registration failed');
                 
                 localStorage.setItem('pendingEmail', data.email);
                 alert('Account created! Please verify your email.');
                 window.location.href = 'pages/verify-otp.html';
             } catch (err) {
+                console.error('Registration Error:', err);
                 alert(err.message);
                 btn.innerHTML = originalText;
                 btn.disabled = false;

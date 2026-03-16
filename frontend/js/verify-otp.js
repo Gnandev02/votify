@@ -47,13 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ email: pendingEmail, otp })
                 });
 
-                const data = await response.json();
+                const contentType = response.headers.get("content-type");
+                let data;
+                if (contentType && contentType.includes("application/json")) {
+                    data = await response.json();
+                } else {
+                    const text = await response.text();
+                    throw new Error(`Server Error: ${text.substring(0, 100)}...`);
+                }
+
                 if (!response.ok) throw new Error(data.message || 'Verification failed');
 
                 alert('Account verified successfully! You can now log in.');
                 localStorage.removeItem('pendingEmail');
                 window.location.href = 'login.html';
             } catch (err) {
+                console.error('Verification Error:', err);
                 alert(err.message);
                 verifyBtn.innerHTML = originalText;
                 verifyBtn.disabled = false;
@@ -70,14 +79,22 @@ async function resendOTP() {
         const response = await fetch("/api/auth?action=register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: pendingEmail, resend: true }) // Note: I should probably update back-end to handle this specific resend flag if needed, but the current register logic will handle it if I pass minimal info or add a resend action. Actually, the user's initial auth.js had a resend flag. Let me re-add it or use action=resend-otp.
+            body: JSON.stringify({ email: pendingEmail, resend: true })
         });
-        // For now, I'll just stick to the requirements. The user's original code had a resend flag in register action.
         
-        const data = await response.json();
+        const contentType = response.headers.get("content-type");
+        let data;
+        if (contentType && contentType.includes("application/json")) {
+            data = await response.json();
+        } else {
+            const text = await response.text();
+            throw new Error(`Server Error: ${text.substring(0, 100)}...`);
+        }
+
         if (!response.ok) throw new Error(data.message || 'Failed to resend OTP');
         alert('A new OTP has been sent to your email.');
     } catch (err) {
+        console.error('Resend Error:', err);
         alert(err.message);
     }
 }
