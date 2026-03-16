@@ -70,6 +70,33 @@
                 Already have an account? <a href="login.html" class="text-teal-400 hover:underline">Log in</a>
             </p>
         </form>
+
+        <div id="otpSection" class="hidden saas-card p-10 bg-[#112947] border border-white/10 rounded-2xl shadow-2xl space-y-7">
+            <div class="text-center space-y-3">
+                <h3 class="text-xl font-bold text-white">Verify Your Email</h3>
+                <p class="text-sm text-slate-400">We've sent a 6-digit code to <span id="displayEmail" class="text-teal-400 font-bold">your email</span></p>
+            </div>
+
+            <form id="otpForm" class="space-y-7">
+                <div class="flex justify-between gap-2 overflow-hidden">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 bg-[#0E2340] border border-white/10 rounded-xl text-center text-xl font-bold text-teal-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 bg-[#0E2340] border border-white/10 rounded-xl text-center text-xl font-bold text-teal-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 bg-[#0E2340] border border-white/10 rounded-xl text-center text-xl font-bold text-teal-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 bg-[#0E2340] border border-white/10 rounded-xl text-center text-xl font-bold text-teal-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 bg-[#0E2340] border border-white/10 rounded-xl text-center text-xl font-bold text-teal-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 bg-[#0E2340] border border-white/10 rounded-xl text-center text-xl font-bold text-teal-400 focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
+                </div>
+
+                <button type="submit" id="verifyBtn" class="btn-primary w-full py-4 text-base font-bold shadow-lg bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition-all">
+                    Verify & Create Account
+                </button>
+
+                <div class="text-center space-y-2">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Didn't receive the code?</p>
+                    <button type="button" onclick="resendOTP()" class="text-sm font-bold text-teal-400 hover:underline">Resend OTP</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="../js/app.js"></script>
