@@ -3,111 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Access | Votify Secure Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { 'saas-blue': '#1e3a8a', 'saas-teal': '#14b8a6' }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Verify OTP - Votify</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .verify-card {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 { margin-bottom: 0.5rem; font-weight: 700; }
+        p { color: var(--text-muted); margin-bottom: 2rem; }
+
+        .otp-inputs {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .otp-input {
+            width: 3.5rem;
+            height: 3.5rem;
+            background-color: #334155;
+            border: 2px solid #475569;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .otp-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .verify-btn {
+            width: 100%;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .verify-btn:hover { opacity: 0.9; }
+        .verify-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .resend-text { margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-muted); }
+        .resend-link { color: var(--accent); text-decoration: none; font-weight: 500; cursor: pointer; }
+    </style>
 </head>
-<body class="bg-[#0B1F3A] text-slate-100 min-h-screen flex items-center justify-center p-6 font-inter">
-
-    <div class="max-w-md w-full reveal-up">
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-3 mb-6">
-                <div class="w-12 h-12 bg-teal-600 flex items-center justify-center rounded-xl shadow-lg">
-                    <i data-lucide="shield-check" class="text-white w-7 h-7"></i>
-                </div>
-                <span class="text-3xl font-extrabold tracking-tight text-white">Votify</span>
+<body>
+    <div class="verify-card">
+        <h2>Email Verification</h2>
+        <p>Please enter the 6-digit code sent to your email.</p>
+        
+        <form id="otpForm">
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" class="otp-input" required>
+                <input type="text" maxlength="1" class="otp-input" required>
+                <input type="text" maxlength="1" class="otp-input" required>
+                <input type="text" maxlength="1" class="otp-input" required>
+                <input type="text" maxlength="1" class="otp-input" required>
+                <input type="text" maxlength="1" class="otp-input" required>
             </div>
-            <h2 class="text-2xl font-bold text-white mb-2">Security Verification</h2>
-            <p class="text-sm text-slate-400 font-medium tracking-wide uppercase">Enter the 6-digit access code</p>
-        </div>
-
-        <form id="otpForm" class="saas-card p-10 space-y-8 bg-[#112947] border border-white/10 rounded-2xl shadow-2xl">
-            <div class="text-center space-y-2">
-                <p class="text-xs font-bold text-teal-400 uppercase tracking-[0.15em]">Verification Required</p>
-                <p class="text-sm text-slate-400 leading-relaxed">
-                    We've sent a 6-digit code to your email. Please enter it below to continue.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-6 gap-3" id="otpContainer">
-                <input type="text" maxlength="1" class="otp-input w-full bg-[#0E2340] border border-white/10 rounded-xl py-5 text-center text-2xl font-black text-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                <input type="text" maxlength="1" class="otp-input w-full bg-[#0E2340] border border-white/10 rounded-xl py-5 text-center text-2xl font-black text-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                <input type="text" maxlength="1" class="otp-input w-full bg-[#0E2340] border border-white/10 rounded-xl py-5 text-center text-2xl font-black text-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                <input type="text" maxlength="1" class="otp-input w-full bg-[#0E2340] border border-white/10 rounded-xl py-5 text-center text-2xl font-black text-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                <input type="text" maxlength="1" class="otp-input w-full bg-[#0E2340] border border-white/10 rounded-xl py-5 text-center text-2xl font-black text-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                <input type="text" maxlength="1" class="otp-input w-full bg-[#0E2340] border border-white/10 rounded-xl py-5 text-center text-2xl font-black text-white focus:outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-            </div>
-
-            <button type="submit" class="btn-primary w-full py-4 text-base font-bold shadow-lg mt-4 bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition-all">
-                Verify Identity
-            </button>
-
-            <div class="text-center pt-4">
-                <button type="button" id="resendBtn" class="text-xs font-bold text-slate-500 hover:text-teal-400 transition-colors uppercase tracking-[0.2em]">Resend Code</button>
-            </div>
+            
+            <button type="submit" class="verify-btn" id="verifyBtn">Verify Account</button>
         </form>
+
+        <p class="resend-text">Didn't receive code? <span class="resend-link" onclick="resendOTP()">Resend</span></p>
     </div>
 
     <script src="../js/app.js"></script>
-    <script src="../js/auth.js"></script>
-    <script>
-        lucide.createIcons();
-        setTimeout(() => {
-            document.querySelector('.reveal-up').classList.add('visible');
-        }, 100);
-        
-        const inputs = document.querySelectorAll('.otp-input');
-        const email = localStorage.getItem('pendingEmail');
-
-        if (!email) window.location.href = 'register.html';
-
-        inputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                if (e.target.value.length === 1 && index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                }
-            });
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                    inputs[index - 1].focus();
-                }
-            });
-        });
-
-        document.getElementById('resendBtn').addEventListener('click', async (e) => {
-            const btn = e.target;
-            try {
-                btn.disabled = true;
-                btn.innerText = 'SENDING...';
-                
-                const response = await fetch("/api/auth?action=register", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, resend: true })
-                });
-
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'Resend failed');
-                
-                alert('A new verification code has been sent.');
-            } catch (err) {
-                alert(err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'RESEND CODE';
-            }
-        });
-    </script>
+    <script src="../js/verify-otp.js"></script>
 </body>
 </html>

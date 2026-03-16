@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 localStorage.setItem('pendingEmail', data.email);
                 alert('Account created! Please verify your email.');
-                window.location.href = 'verify-otp.html';
+                window.location.href = 'pages/verify-otp.html';
             } catch (err) {
                 alert(err.message);
                 btn.innerHTML = originalText;
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const email = localStorage.getItem('pendingEmail');
                 const otp = Array.from(document.querySelectorAll('.otp-input')).map(i => i.value).join('');
                 
-                const response = await fetch("/api/auth?action=verify", {
+                const response = await fetch("/api/auth?action=verify-otp", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, otp })
